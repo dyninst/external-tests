@@ -6,4 +6,5 @@ find_package(Boost REQUIRED)
 
 add_subdirectory(common)
 add_subdirectory(dataflowAPI)
+add_subdirectory(proccontrol)
 add_subdirectory(symtab)
