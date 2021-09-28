@@ -2,5 +2,5 @@ project(common)
 
 add_executable(common_insertion_operators insertion_operators.cpp)
 set_target_properties(common_insertion_operators PROPERTIES OUTPUT_NAME insertion_operators)
-target_include_directories(common_insertion_operators PRIVATE ${DYNINST_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
+target_include_directories(common_insertion_operators PRIVATE ${DYNINST_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${TBB_INCLUDE_DIRS})
 target_link_libraries(common_insertion_operators PRIVATE common)
