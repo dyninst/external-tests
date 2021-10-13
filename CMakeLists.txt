@@ -9,5 +9,6 @@ include(ThreadingBuildingBlocks)
 
 add_subdirectory(common)
 add_subdirectory(dataflowAPI)
+add_subdirectory(dyninstAPI)
 add_subdirectory(proccontrol)
 add_subdirectory(symtab)
