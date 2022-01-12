@@ -15,7 +15,6 @@ target_link_libraries(
          dynC_API
          dynDwarf
          dynElf
-         dyninstAPI_RT
          dyninstAPI
          instructionAPI
          parseAPI
