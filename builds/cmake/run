@@ -1,0 +1,46 @@
+#!/bin/bash
+
+decode_compiler () {
+	case $1 in
+	    gcc) cc=gcc; cxx=g++; ;;
+	  clang) cc=clang; cxx=clang++; ;;
+	      *)echo "Unknown compiler '$compiler'"; exit 1;;
+	esac
+}
+
+compiler=$1
+shift
+mutatee_compiler=$1
+shift
+
+if test x"$compiler" = "x" || test x"$mutatee_compiler" = "x"; then
+  echo "Usage: $0 <compiler> <mutatee_compiler>"
+  exit 1
+fi
+
+decode_compiler $compiler
+args=
+args+="-DCMAKE_C_COMPILER=$cc "
+args+="-DCMAKE_CXX_COMPILER=$cxx "
+
+ts_args=
+ts_args+="-DCMAKE_C_COMPILER=$cc "
+ts_args+="-DCMAKE_CXX_COMPILER=$cxx "
+
+decode_compiler $mutatee_compiler
+ts_args+="-DCMAKE_MUT_C_COMPILER=$cc "
+ts_args+="-DCMAKE_MUT_CXX_COMPILER=$cxx "
+
+if test "$1" = "--debug"; then
+  shift
+  args+="-DCMAKE_BUILD_TYPE=Debug "
+  ts_args+="-DCMAKE_BUILD_TYPE=Debug "
+fi
+
+opts=
+opts+="--njobs=48 "
+opts+="--ntestjobs=1 "
+opts+="--nompthreads=1 "
+opts+="--auth-token=ec2798c1fb37cce8d95d8e1d558bd519 "
+
+perl testsuite/scripts/build/build.pl --dyninst-cmake-args="$args" --testsuite-cmake-args="$ts_args" $opts $@

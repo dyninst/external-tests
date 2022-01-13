@@ -1,4 +1,12 @@
-*.o
+# Created directories
+dyninst/
+testsuite/
+spack/
+
+# Log files
+*.log
+*.out
+*.err
 
 # Eclipse files
 .cproject
