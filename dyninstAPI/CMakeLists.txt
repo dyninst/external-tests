@@ -2,5 +2,4 @@ project(dyninstAPI)
 
 add_executable(da_insertion_operators insertion_operators.cpp)
 set_target_properties(da_insertion_operators PROPERTIES OUTPUT_NAME insertion_operators)
-target_include_directories(da_insertion_operators PRIVATE ${DYNINST_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
-target_link_libraries(da_insertion_operators PRIVATE dyninstAPI)
+target_link_libraries(da_insertion_operators PRIVATE Dyninst::dyninstAPI)
