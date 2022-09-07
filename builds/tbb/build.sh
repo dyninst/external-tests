@@ -9,4 +9,3 @@ perl install.pl intel-tbb \
 
 # OneAPI
 perl install.pl intel-oneapi-tbb 2021.6.0 2021.5.1 2021.5.0 2021.4.0 2021.3.0 2021.2.0 2021.1.1
-

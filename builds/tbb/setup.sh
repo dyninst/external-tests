@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# Create or update spack
-if test ! -d spack; then
-  git clone --depth 1 --branch develop https://github.com/spack/spack
-else
-  git -C spack pull --ff-only origin develop
-fi
+# Make links to dyninst/testsuite
+dyninst_dir=$1
+testsuite_dir=$2
+ln -s $dyninst_dir dyninst
+ln -s $testsuite_dir testsuite
+
+# Grab a fresh spack
+git clone --depth 1 --branch develop https://github.com/spack/spack
 
 # Use the E4S binary cache to speed up installs
 spack/bin/spack mirror add E4S https://cache.e4s.io
