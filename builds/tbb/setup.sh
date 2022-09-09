@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if test x"$dyninst_dir" = "x" -o x"$testsuite_dir" = "x"; then
+  echo "Usage: $0 dyninst_dir testsuite_dir"
+  exit -1
+fi
+
 # Make links to dyninst/testsuite
 dyninst_dir=$1
 testsuite_dir=$2
