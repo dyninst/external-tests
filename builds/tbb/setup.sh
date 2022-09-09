@@ -1,15 +1,13 @@
 #!/bin/bash
 
-if test x"$dyninst_dir" = "x" -o x"$testsuite_dir" = "x"; then
+if test x"$1" = "x" -o x"$2" = "x"; then
   echo "Usage: $0 dyninst_dir testsuite_dir"
   exit -1
 fi
 
 # Make links to dyninst/testsuite
-dyninst_dir=$1
-testsuite_dir=$2
-ln -s $dyninst_dir dyninst
-ln -s $testsuite_dir testsuite
+ln -s $1 dyninst
+ln -s $2 testsuite
 
 # Grab a fresh spack
 git clone --depth 1 --branch develop https://github.com/spack/spack
