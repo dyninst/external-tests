@@ -17,7 +17,7 @@ function run() {
 . spack/share/spack/setup-env.sh
 spack env activate .
 
-rm -f tbb-install.log tbb-oneapi.install.log install.log
+rm -f intel-tbb-install.log intel-oneapi-tbb-install.log install.log
 
 # Intel TBB
 declare -a versions=(
@@ -31,4 +31,4 @@ run intel-tbb "${versions[@]}"
 versions=(2021.6.0 2021.5.1 2021.5.0 2021.4.0 2021.3.0 2021.2.0 2021.1.1)
 run intel-oneapi-tbb "${versions[@]}"
 
-cat install.intel-tbb.log >> install.log
+cat intel-tbb-install.log intel-oneapi-tbb-install.log >> install.log
