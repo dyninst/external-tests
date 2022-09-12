@@ -8,13 +8,13 @@ while IFS= read -r package; do
 
   spack load $package
   if test $? != 0; then
-    echo Failed to load module for $package
-    exit -1
+    echo Failed to load module for $package >&2
+    continue
   fi
 
   ./run gcc gcc --purge
   if test $? != 0; then
-    echo Failed to run tests with $package
-    exit -1
+    echo Failed to run tests with $package >&2
+    continue
   fi
 done < install.log
