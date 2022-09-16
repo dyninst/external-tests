@@ -20,4 +20,4 @@ while IFS= read -r package; do
     continue
   fi
   spack unload $package
-done < install.log
+done < packages.versions.log
