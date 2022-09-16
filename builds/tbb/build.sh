@@ -8,10 +8,10 @@ function add_packages() {
   package=$1
   shift
   
-  rm -f ${package}-install.log
+  rm -f ${package}-versions.log
 
   for v in "$@"; do
-    echo "$package@$v" >>${package}-install.log
+    echo "$package@$v" >>${package}-versions.log
     echo "Adding $package@$v"
     spack add "$package@$v"
     if test $? != 0; then
@@ -19,7 +19,7 @@ function add_packages() {
     fi
   done
   
-  cat ${package}-install.log >> $package_log
+  cat ${package}-versions.log >> $package_log
 }
 
 . spack/share/spack/setup-env.sh
