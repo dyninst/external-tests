@@ -11,12 +11,13 @@ function do_install() {
   rm -f ${package}-versions.log
 
   for v in "$@"; do
-    echo "$package@$v" >>${package}-versions.log
     echo "Installing $package@$v..."
-    spack install -j2 --reuse $package@$v >>packages.install.log
+    spack install -j2 --reuse $package@$v >>packages.install.log 2>&1
     if test $? != 0; then
       echo "Failed to add $package@$v" >&2
+      continue
     fi
+    echo "$package@$v" >>${package}-versions.log
   done
   
   cat ${package}-versions.log >> $package_log
