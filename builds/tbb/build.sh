@@ -13,7 +13,6 @@ function run() {
   for v in "$@"; do
     echo "$package@$v" >>${package}-install.log
     echo "Installing $package@$v"
-    spack add "$package@$v"
     spack install -j2 "$package@$v"
     if test $? != 0; then
       echo "Failed to install $package@$v" >&2
@@ -24,7 +23,6 @@ function run() {
 }
 
 . spack/share/spack/setup-env.sh
-spack env activate .
 
 # Intel TBB
 declare -a versions=(
