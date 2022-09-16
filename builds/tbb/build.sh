@@ -2,9 +2,9 @@
 
 # A list of all package names added/installed here
 package_log=packages.versions.log
-rm -f $package_log
+rm -f $package_log packages.install.log
 
-function add_packages() {
+function do_install() {
   package=$1
   shift
   
@@ -12,8 +12,8 @@ function add_packages() {
 
   for v in "$@"; do
     echo "$package@$v" >>${package}-versions.log
-    echo "Adding $package@$v"
-    spack add "$package@$v"
+    echo "Installing $package@$v..."
+    spack install -j2 --reuse >>packages.install.log
     if test $? != 0; then
       echo "Failed to add $package@$v" >&2
     fi
@@ -23,7 +23,6 @@ function add_packages() {
 }
 
 . spack/share/spack/setup-env.sh
-spack env activate .
 
 # Intel TBB
 declare -a versions=(
@@ -31,11 +30,8 @@ declare -a versions=(
   2021.2.0 2021.1.1 2020.3 2020.2 2020.1 2020.0 \
   2019.9 2019.8 2019.7 2019.6 2019.5 2019.4 2019.3 \
   2019.2 2019.1 2019 2018.6)
-add_packages intel-tbb "${versions[@]}"
+do_install intel-tbb "${versions[@]}"
 
 # OneAPI
 versions=(2021.6.0 2021.5.1 2021.5.0 2021.4.0 2021.3.0 2021.2.0 2021.1.1)
-add_packages intel-oneapi-tbb "${versions[@]}"
-
-echo "Installing..."
-spack install -j2 --reuse >packages.install.log
+do_install intel-oneapi-tbb "${versions[@]}"
