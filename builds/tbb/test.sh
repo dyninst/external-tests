@@ -1,7 +1,7 @@
 #!/bin/bash
 
 . spack/share/spack/setup-env.sh
-spack env activate .
+spack load boost elfutils libiberty
 
 while IFS= read -r package; do
   echo testing $package
