@@ -13,7 +13,7 @@ function do_install() {
   for v in "$@"; do
     echo "$package@$v" >>${package}-versions.log
     echo "Installing $package@$v..."
-    spack install $package@$v -j2 --reuse >>packages.install.log
+    spack install -j2 --reuse $package@$v >>packages.install.log
     if test $? != 0; then
       echo "Failed to add $package@$v" >&2
     fi
