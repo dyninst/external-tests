@@ -1,8 +1,14 @@
 #!/bin/bash
 
+# A list of all package names added/installed here
+package_log=packages.versions.log
+rm -f $package_log
+
 function run() {
   package=$1
   shift
+  
+  rm -f ${package}-install.log
 
   for v in "$@"; do
     echo "$package@$v" >>${package}-install.log
@@ -13,12 +19,12 @@ function run() {
       echo "Failed to install $package@$v" >&2
     fi
   done
+  
+  cat ${package}-install.log >> $package_log
 }
 
 . spack/share/spack/setup-env.sh
 spack env activate .
-
-rm -f intel-tbb-install.log intel-oneapi-tbb-install.log install.log
 
 # Intel TBB
 declare -a versions=(
@@ -31,5 +37,3 @@ run intel-tbb "${versions[@]}"
 ## OneAPI
 versions=(2021.6.0 2021.5.1 2021.5.0 2021.4.0 2021.3.0 2021.2.0 2021.1.1)
 run intel-oneapi-tbb "${versions[@]}"
-
-cat intel-tbb-install.log intel-oneapi-tbb-install.log >> install.log
