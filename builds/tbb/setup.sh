@@ -24,4 +24,4 @@ spack add perl
 spack add boost+atomic+chrono+date_time+filesystem+system+thread+timer+container+random+exception
 spack add elfutils
 spack add libiberty+pic
-spack install --reuse
+spack install
