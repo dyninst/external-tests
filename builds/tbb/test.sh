@@ -15,6 +15,10 @@ while IFS= read -r package; do
   fi
   cat build.log >> packages.build.log
 
+  # TBB was the last thing loaded by spack, so it's the first entry in CMAKE_PREFIX_PATH
+  tbb_loc=$(echo $CMAKE_PREFIX_PATH | awk '{split($0,x,":"); print x[1]}')
+  export TBB_ROOT_DIR="${tbb_loc}/cmake"
+
   perl testsuite/scripts/build/build.pl --njobs=2 --purge --no-run-tests
   if test $? != 0; then
     echo Failed to run tests with $package >&2
