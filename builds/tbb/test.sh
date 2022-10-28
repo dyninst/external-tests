@@ -2,7 +2,7 @@
 
 . spack/share/spack/setup-env.sh
 spack load boost elfutils libiberty
-rm -f packages.build.log
+rm -f packages.build.log test.log
 
 while IFS= read -r package; do
   echo testing $package
@@ -15,7 +15,7 @@ while IFS= read -r package; do
   fi
 
   rm -f build.log
-  perl testsuite/scripts/build/build.pl --njobs=2 --purge --no-run-tests
+  perl testsuite/scripts/build/build.pl --njobs=2 --purge --no-run-tests >>test.log 2>&1
   if test $? != 0; then
     echo Failed to run tests with $package >&2
     spack unload $package
