@@ -4,6 +4,11 @@
 package_log=packages.versions.log
 rm -f $package_log packages.install.log
 
+num_jobs=2
+if test x$BUILD_TEST_NUM_JOBS != x; then
+	num_jobs=$BUILD_TEST_NUM_JOBS
+fi
+
 function do_install() {
   package=$1
   shift
@@ -12,7 +17,7 @@ function do_install() {
 
   for v in "$@"; do
     echo "Installing $package@$v..."
-    spack install -j2 --reuse $package@$v >>packages.install.log 2>&1
+    spack install -j${num_jobs} --reuse $package@$v >>packages.install.log 2>&1
     if test $? != 0; then
       echo "Failed to add $package@$v" >&2
       continue
