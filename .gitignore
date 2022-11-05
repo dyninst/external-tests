@@ -7,8 +7,13 @@
 .pydevproject
 .dbeaver
 
-*/dyninst
-*/testsuite
-*/spack
+builds/dyninst
+builds/testsuite
+builds/spack
+
+builds/*/dyninst
+builds/*/testsuite
+builds/*/spack
+
 
 *.log
