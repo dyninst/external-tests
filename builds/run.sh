@@ -8,6 +8,11 @@ if test ! -e testsuite; then
   git clone --depth 1 --branch master https://github.com/dyninst/testsuite
 fi
 
+# Set default number of build/make jobs
+if test x${BUILD_TEST_NUM_JOBS} == x; then
+	export BUILD_TEST_NUM_JOBS=2
+fi
+
 declare -a packages=(tbb)
 declare -a commands=(build.sh test.sh upload.sh cleanup.sh)
 

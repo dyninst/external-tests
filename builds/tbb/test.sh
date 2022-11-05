@@ -15,7 +15,7 @@ while IFS= read -r package; do
   fi
 
   rm -f build.log
-  perl testsuite/scripts/build/build.pl --njobs=2 --purge --no-run-tests >>test.log 2>&1
+  perl testsuite/scripts/build/build.pl --njobs=${BUILD_TEST_NUM_JOBS} --purge --no-run-tests >>test.log 2>&1
   if test $? != 0; then
     echo Failed to build with $package >&2
     spack unload $package
