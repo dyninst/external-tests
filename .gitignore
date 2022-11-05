@@ -5,5 +5,7 @@
 .project
 .settings/
 .pydevproject
+.dbeaver
+
 builds/dyninst
 builds/testsuite
