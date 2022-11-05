@@ -26,13 +26,7 @@ function do_install() {
 . spack/share/spack/setup-env.sh
 
 # Intel TBB
-declare -a versions=(
-  master 2021.6.0-rc1 2021.5.0 2021.4.0 2021.3.0 \
-  2021.2.0 2021.1.1 2020.3 2020.2 2020.1 2020.0 \
-  2019.9 2019.8 2019.7 2019.6 2019.5 2019.4 2019.3 \
-  2019.2 2019.1 2018.6)
-do_install intel-tbb "${versions[@]}"
+do_install intel-tbb $(perl parse_versions.pl intel-tbb 2018.6)
 
 # OneAPI
-versions=(2021.6.0 2021.5.1 2021.5.0 2021.4.0 2021.3.0 2021.2.0 2021.1.1)
-do_install intel-oneapi-tbb "${versions[@]}"
+do_install intel-oneapi-tbb $(perl parse_versions.pl intel-oneapi-tbb)
