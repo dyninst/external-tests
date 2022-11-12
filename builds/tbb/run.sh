@@ -28,7 +28,7 @@ for s in $(perl parse_specs.pl); do
   rm -rf dyninst-build-$s
   mkdir dyninst-build-$s
   cd dyninst-build-$s
-  cmake ../dyninst -DCMAKE_INSTALL_PREFIX=$PWD >/dev/null 2>&1
+  cmake ../dyninst -DCMAKE_INSTALL_PREFIX=$PWD -DDYNINST_WARNINGS_AS_ERRORS >/dev/null 2>&1
   cmake --build . --parallel ${BUILD_TEST_NUM_JOBS} >/dev/null 2>&1
   cmake --install . >/dev/null 2>&1
   if test $? != 0; then
