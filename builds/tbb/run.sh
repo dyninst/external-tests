@@ -1,11 +1,5 @@
 #! /bin/bash
 
-ln -s /dyninst/src dyninst
-ln -s /testsuite/src testsuite
-ln -s /spack spack
-
-base_dir=$PWD
-
 . ./spack/share/spack/setup-env.sh
 rm -f install.log test.log
 
