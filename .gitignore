@@ -12,3 +12,5 @@ spack/
 .cproject
 .project
 .settings/
+.dbeaver
+.pydevproject
