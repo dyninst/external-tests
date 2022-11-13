@@ -13,15 +13,13 @@ sub specs {
   my ($package, $min_version) = @_;
   my @versions = map { &parse_version($_); } `COLIFY_SIZE=1000x1 spack versions -s $package`;
 
-  if($package eq 'intel-tbb') {
-    my @exclude = (
-      # 2021.2.0 and 2021.1.1 don't build (see https://github.com/oneapi-src/oneTBB/issues/370)
-      '2021.2.0','2021.1.1',
-      # intel-tbb@2019 is ambiguous with intel-tbb@2019.X
-      '2019'
-    );
-    @versions = grep { my $v=$_; !grep{$_ eq $v->{'version'}} @exclude} @versions;
-  }
+  my @exclude = (
+    # 2021.2.0 and 2021.1.1 don't build (see https://github.com/oneapi-src/oneTBB/issues/370)
+    '2021.2.0','2021.1.1',
+    # intel-tbb@2019 is ambiguous with intel-tbb@2019.X
+    '2019'
+  );
+  @versions = grep { my $v=$_; !grep{$_ eq $v->{'version'}} @exclude} @versions;
 
   # Exclude everything below `min_version`
   if($min_version) {
