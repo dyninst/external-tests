@@ -32,4 +32,4 @@ printf "\
     buildable: false\n\
 " >> ~/.spack/packages.yaml
 
-COPY builds/tbb/* /
+COPY builds/tbb/parse_specs.pl builds/run.sh /
