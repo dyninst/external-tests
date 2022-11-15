@@ -1,0 +1,26 @@
+ARG base
+FROM ${base}
+
+LABEL maintainer="@hainest"
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Chicago
+
+RUN apt -qq install -y --no-install-recommends \
+    python3         \
+    python3-pip     \
+    git             \
+    curl
+
+# Remove system Boost so it doesn't interfere
+RUN apt -qq remove --purge -y libboost*
+
+RUN git clone --depth 1 --branch master https://github.com/dyninst/testsuite testsuite/src
+
+RUN pip3 install clingo && \
+    git clone --depth 1 --branch develop https://github.com/spack/spack && \
+    ln -s /spack/bin/spack /usr/bin/spack && \
+    spack compiler find && \
+    spack external find --not-buildable gcc cmake
+
+COPY builds/boost/parse_specs.pl builds/run.sh /

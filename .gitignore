@@ -1,19 +1,6 @@
-*.o
-
 # Eclipse files
 .cproject
 .project
 .settings/
 .pydevproject
 .dbeaver
-
-builds/dyninst
-builds/testsuite
-builds/spack
-
-builds/*/dyninst
-builds/*/testsuite
-builds/*/spack
-
-
-*.log
