@@ -1,5 +1,10 @@
 #! /bin/bash
 
+if test x"${BUILD_TEST_NUM_JOBS}" = x; then
+  echo "BUILD_TEST_NUM_JOBS not set"
+  exit 1
+fi
+
 . ./spack/share/spack/setup-env.sh
 
 for spec in $(perl parse_specs.pl); do
