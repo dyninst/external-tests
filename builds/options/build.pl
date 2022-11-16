@@ -15,6 +15,8 @@ my %options = (
   'USE_OpenMP' => ['OFF'] # default ON
 );
 
+my $build_failed = 0;
+
 &build(%options);
 
 # 'christmas tree' build
@@ -24,6 +26,10 @@ my %xmas = map {$_=>['ON']} grep {$_ ne 'CMAKE_BUILD_TYPE'} keys %options;
 # 'dark' build
 my %dark = map {$_=>['OFF']} grep {$_ ne 'CMAKE_BUILD_TYPE'} keys %options;
 &build(%dark);
+
+die "Failed\n" if $build_failed;
+
+#-----------------------------------------------------------------------
 
 sub build {
 	my %opts = @_;
@@ -47,7 +53,10 @@ sub build_dyninst {
 			cmake --install . >/dev/null 2>&1
 		"
 	);
-	die "Failed to build Dyninst\n" if $ret != 0;
+	if($ret != 0) {
+    warn "Failed to build Dyninst\n";
+    $build_failed = 1;
+  }
 }
 
 sub build_testsuite {
@@ -59,5 +68,8 @@ sub build_testsuite {
 			cmake --install . >/dev/null 2>&1
 		"
 	);
-	die "Failed to build testsuite\n" if $ret != 0;
+  if($ret != 0) {
+    warn "Failed to build testsuite\n";
+    $build_failed = 1;
+  }
 }
