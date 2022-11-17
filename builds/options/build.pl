@@ -19,13 +19,21 @@ my $build_failed = 0;
 
 &build(%options);
 
-# 'christmas tree' build
-my %xmas = map {$_ => ['ON']} grep {$_ ne 'CMAKE_BUILD_TYPE'} keys %options;
-&build(%xmas);
+# 'christmas tree' build- all options ON
+{
+	my $xmas = '';
+	map {$xmas .= "-D$_=ON "} grep {$_ ne 'CMAKE_BUILD_TYPE'} keys %options;
+	print "Trying XMAS... ";
+	print "OK\n" if &build_dyninst($xmas) && &build_testsuite($xmas);
+}
 
-# 'dark' build
-my %dark = map {$_ => ['OFF']} grep {$_ ne 'CMAKE_BUILD_TYPE'} keys %options;
-&build(%dark);
+# 'dark' build- all options OFF
+{
+	my $dark = '';
+	map {$dark .= "-D$_=OFF "} grep {$_ ne 'CMAKE_BUILD_TYPE'} keys %options;
+	print "Trying DARK... ";
+	print "OK\n" if &build_dyninst($dark) && &build_testsuite($dark);
+}
 
 die "Failed\n" if $build_failed;
 
