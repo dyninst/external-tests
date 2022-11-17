@@ -37,9 +37,7 @@ sub build {
 		for my $v (@{$opts{$o}}) {
 			my $arg = "-D$o=$v";
 			print "Trying $o=$v... ";
-			&build_dyninst($arg);
-			&build_testsuite($arg);
-			print "OK\n";
+			print "OK\n" if &build_dyninst($arg) && &build_testsuite($arg);	
 		}
 	}
 }
@@ -56,7 +54,9 @@ sub build_dyninst {
 	if($ret != 0) {
     warn "Failed to build Dyninst\n";
     $build_failed = 1;
+    return 0;
   }
+  return 1;
 }
 
 sub build_testsuite {
@@ -71,5 +71,7 @@ sub build_testsuite {
   if($ret != 0) {
     warn "Failed to build testsuite\n";
     $build_failed = 1;
+    return 0;
   }
+  return 1;
 }
