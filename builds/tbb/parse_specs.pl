@@ -14,6 +14,7 @@ sub specs {
   my @versions = map { &parse_version($_); } `COLIFY_SIZE=1000x1 spack versions -s $package`;
 
   my @exclude = (
+  	'master',
     # 2021.2.0 and 2021.1.1 don't build (see https://github.com/oneapi-src/oneTBB/issues/370)
     '2021.2.0','2021.1.1',
     # intel-tbb@2019 is ambiguous with intel-tbb@2019.X
@@ -26,8 +27,6 @@ sub specs {
     my $mv = &parse_version($min_version);
     sub less {
       ($a,$b) = @_;
-      return 0 if $a->{'version'} eq 'master';
-      return 1 if $b->{'version'} eq 'master';
       return
         $a->{'major'} < $b->{'major'} ||
         ($a->{'major'} == $b->{'major'} && $a->{'minor'} < $b->{'minor'}) ||

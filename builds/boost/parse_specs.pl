@@ -17,8 +17,6 @@ my @versions = grep { my $v=$_; !grep{$_ eq $v->{'version'}} @exclude}
 my $mv = &parse_version('1.70.0');
 sub less {
   ($a,$b) = @_;
-  return 0 if $a->{'version'} eq 'master';
-  return 1 if $b->{'version'} eq 'master';
   return
     $a->{'major'} < $b->{'major'} ||
     ($a->{'major'} == $b->{'major'} && $a->{'minor'} < $b->{'minor'}) ||
