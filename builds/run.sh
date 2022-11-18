@@ -9,7 +9,7 @@ fi
 
 for spec in $(perl parse_specs.pl); do
   echo -n "${spec}... "
-  spack install -j${BUILD_TEST_NUM_JOBS} ${spec} 2>&1
+  spack install -j${BUILD_TEST_NUM_JOBS} ${spec} >/dev/null 2>&1
   if test $? != 0; then
     echo "Failed to install" >&2
     continue
