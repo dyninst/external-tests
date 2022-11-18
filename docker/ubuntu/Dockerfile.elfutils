@@ -12,9 +12,9 @@ RUN apt -qq install -y --no-install-recommends \
     python3         \
     python3-pip     \
     git             \
-    curl			\
-    pkg-config		\
-    libcurl4-openssl-dev
+    curl            \
+    m4              \
+    zlib1g-dev
 
 # Remove installed elfutils
 #  Can be installed via apt or from source
@@ -32,12 +32,18 @@ RUN pip3 install clingo && \
     git clone --depth 1 --branch develop https://github.com/spack/spack && \
     ln -s /spack/bin/spack /usr/bin/spack && \
     spack compiler find && \
-    spack external find --not-buildable gcc cmake && \
-    version=$(apt show pkg-config | perl -ne 'print $1 if m/version\:\s*(\d+\.\d+\.\d+)/i') && \
+    spack external find --not-buildable gcc cmake pkgconf m4 zlib && \
+    pkgconf_version=$(apt show pkg-config | perl -ne 'print $1 if m/version\:\s*(\d+\.\d+\.\d+)/i') && \
+    zlib_version=$(apt show zlib1g-dev | perl -ne 'print $1 if m/version\:\s*\d\:(\d+\.\d+\.\d+)/i') && \
 printf "\
-  pkg-config:\n\
+  pkgconf:\n\
     externals:\n\
-    - spec: pkg-config@${version}\n\
+    - spec: pkgconf@${pkgconf_version}\n\
+      prefix: /usr\n\
+    buildable: false\n\
+  zlib:\n\
+    externals:\n\
+    - spec: zlib@${zlib_version}\n\
       prefix: /usr\n\
     buildable: false\n\
 " >> ~/.spack/packages.yaml
