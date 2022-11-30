@@ -31,7 +31,7 @@ for spec in $(perl parse_specs.pl); do
   cmake --build . --parallel ${BUILD_TEST_NUM_JOBS} >/dev/null 2>&1
   cmake --install . >/dev/null 2>&1
   if test $? != 0; then
-    echo "Failed" >&2
+    echo "Dyninst build failed" >&2
     spack unload ${spec}
     continue
   fi
@@ -42,7 +42,7 @@ for spec in $(perl parse_specs.pl); do
   cmake --build . --parallel ${BUILD_TEST_NUM_JOBS} >/dev/null 2>&1
   cmake --install . >/dev/null 2>&1
   if test $? != 0; then
-    echo "Failed" >&2
+    echo "Testsuite build failed" >&2
     spack unload ${spec}
     continue
   fi
