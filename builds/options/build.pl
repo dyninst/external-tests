@@ -23,7 +23,7 @@ my $build_failed = 0;
 # 'christmas tree' build- all options ON
 {
 	my $xmas = '';
-	map {$xmas .= "-D$_=ON "} grep {$_ ne 'CMAKE_BUILD_TYPE'} keys %options;
+	map {$xmas .= "-D$_=ON "} grep {$_ ne 'CMAKE_BUILD_TYPE' && $_ ne 'LIGHTWEIGHT_SYMTAB'} keys %options;
 	print "Trying XMAS... ";
 	print "OK\n" if &build_dyninst($xmas) && &build_testsuite($xmas);
 }
@@ -46,7 +46,12 @@ sub build {
 		for my $v (@{$opts{$o}}) {
 			my $arg = "-D$o=$v";
 			print "Trying $o=$v... ";
-			print "OK\n" if &build_dyninst($arg) && &build_testsuite($arg);
+			if(&build_dyninst($arg)) {
+				if($o ne 'LIGHTWEIGHT_SYMTAB') {
+					&build_testsuite($arg);
+				}
+				print "OK\n";
+			}
 		}
 	}
 }
