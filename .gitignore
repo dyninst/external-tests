@@ -4,3 +4,6 @@
 .settings/
 .pydevproject
 .dbeaver
+
+# ctest
+Testing/

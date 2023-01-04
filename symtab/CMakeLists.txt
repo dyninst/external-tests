@@ -1,11 +1,10 @@
 project(symtabAPI)
 
-add_executable(st_parse_function_params parse_function_params.cpp)
-set_target_properties(st_parse_function_params PROPERTIES OUTPUT_NAME parse_function_params)
-target_include_directories(st_parse_function_params PRIVATE ${DYNINST_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
-target_link_libraries(st_parse_function_params PRIVATE symtabAPI)
+add_executable(symtab_parse_function_params parse_function_params.cpp)
+target_link_libraries(symtab_parse_function_params PRIVATE Dyninst::symtabAPI)
 
-add_executable(st_insertion_operators insertion_operators.cpp)
-set_target_properties(st_insertion_operators PROPERTIES OUTPUT_NAME insertion_operators)
-target_include_directories(st_insertion_operators PRIVATE ${DYNINST_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
-target_link_libraries(st_insertion_operators PRIVATE symtabAPI common)
+add_executable(symtab_insertion_operators insertion_operators.cpp)
+target_link_libraries(symtab_insertion_operators PRIVATE Dyninst::symtabAPI)
+
+add_executable(symtab_includes includes.cpp)
+target_link_libraries(symtab_includes PRIVATE Dyninst::symtabAPI)
