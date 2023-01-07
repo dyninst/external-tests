@@ -1,4 +1,4 @@
-project(instructionAPI)
+project(parseAPI)
 
-add_executable(instructionAPI_includes includes.cpp)
-target_link_libraries(instructionAPI_includes PRIVATE Dyninst::instructionAPI)
+add_executable(parseAPI_includes includes.cpp)
+target_link_libraries(parseAPI_includes PRIVATE Dyninst::parseAPI)

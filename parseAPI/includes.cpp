@@ -1,23 +1,17 @@
-#include "ArchSpecificFormatters.h"
-#include "BinaryFunction.h"
-#include "Dereference.h"
-#include "Expression.h"
-#include "Immediate.h"
-#include "InstructionAST.h"
-#include "InstructionCategories.h"
-#include "InstructionDecoder.h"
-#include "Instruction.h"
-#include "Operand.h"
-#include "Operation_impl.h"
-#include "Register.h"
-#include "RegisterIDs.h"
-#include "Result.h"
-#include "Ternary.h"
-#include "Visitor.h"
-
+#include "CFGFactory.h"
+#include "CFG.h"
+#include "CFGModifier.h"
+#include "CodeObject.h"
+#include "CodeSource.h"
+#include "InstructionAdapter.h"
+#include "InstructionSource.h"
+#include "Location.h"
+#include "LockFreeQueue.h"
+#include "ParseCallback.h"
+#include "ParseContainers.h"
 
 int main() {
-	namespace di = Dyninst::InstructionAPI;
-	di::ArchSpecificFormatter *f;
-	f->getInstructionString({});
+	namespace dp = Dyninst::ParseAPI;
+	dp::Intraproc ip;
+	ip.pred_impl(nullptr);
 }
