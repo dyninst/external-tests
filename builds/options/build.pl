@@ -13,7 +13,7 @@ my %options = (
 	'LIGHTWEIGHT_SYMTAB'       => ['ON'],                                                 # default OFF
 	'SW_ANALYSIS_STEPPER'      => ['OFF'],                                                # default ON
 	'USE_OpenMP'               => ['OFF'],                                                # default ON
-	'ENABLE_PARSE_API_GRAPHS'  => ['ON']                                                  # default OFF
+#	'ENABLE_PARSE_API_GRAPHS'  => ['ON']                                                  # default OFF
 );
 
 my $build_failed = 0;
