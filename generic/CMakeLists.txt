@@ -1,25 +1,20 @@
 project(generic)
 
-#include(ElfUtils)
-
 # "christmas tree" test Like the "christmas tree" packet attack, this turns on
 # all the includes and library links
-add_executable(g_xmas_tree xmas_tree.cpp)
-set_target_properties(g_xmas_tree PROPERTIES OUTPUT_NAME xmas_tree)
-target_include_directories(
-  g_xmas_tree PRIVATE ${DYNINST_INCLUDE_DIR} ${Boost_INCLUDE_DIR}
-                      ${ElfUtils_INCLUDE_DIRS})
-target_link_libraries(
-  g_xmas_tree
-  PUBLIC common
-         dynC_API
-         dynDwarf
-         dynElf
-         dyninstAPI
-         instructionAPI
-         parseAPI
-         patchAPI
-         pcontrol
-         stackwalk
-         symLite
-         symtabAPI)
+add_executable(xmas_tree xmas_tree.cpp)
+target_link_libraries(xmas_tree
+  PUBLIC Dyninst::common
+         Dyninst::dynC_API
+         Dyninst::dynDwarf
+         Dyninst::dynElf
+         Dyninst::dyninstAPI
+         Dyninst::instructionAPI
+         Dyninst::parseAPI
+         Dyninst::patchAPI
+         Dyninst::pcontrol
+         Dyninst::stackwalk
+         Dyninst::symLite
+         Dyninst::symtabAPI)
+
+add_test(xmas_tree xmas_tree)
