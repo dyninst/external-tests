@@ -12,7 +12,6 @@ set(_components
 	patchAPI
 	pcontrol
 	stackwalk
-	symLite
 	symtabAPI)
 
 foreach(c ${_components})
@@ -36,5 +35,4 @@ add_subdirectory(parseAPI)
 add_subdirectory(patchAPI)
 add_subdirectory(proccontrol)
 add_subdirectory(stackwalk)
-add_subdirectory(symLite)
 add_subdirectory(symtab)

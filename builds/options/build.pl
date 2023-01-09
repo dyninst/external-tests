@@ -10,7 +10,6 @@ my %options = (
 	'ENABLE_DEBUGINFOD'        => ['ON'],                                                 # default OFF
 	'ENABLE_LTO'               => ['ON'],                                                 # default OFF
 	'ENABLE_STATIC_LIBS'       => ['ON'],                                                 # default OFF
-	'LIGHTWEIGHT_SYMTAB'       => ['ON'],                                                 # default OFF
 	'SW_ANALYSIS_STEPPER'      => ['OFF'],                                                # default ON
 	'USE_OpenMP'               => ['OFF'],                                                # default ON
 #	'ENABLE_PARSE_API_GRAPHS'  => ['ON']                                                  # default OFF
@@ -23,7 +22,7 @@ my $build_failed = 0;
 # 'christmas tree' build- all options ON
 {
 	my $xmas = '';
-	map {$xmas .= "-D$_=ON "} grep {$_ ne 'CMAKE_BUILD_TYPE' && $_ ne 'LIGHTWEIGHT_SYMTAB'} keys %options;
+	map {$xmas .= "-D$_=ON "} grep {$_ ne 'CMAKE_BUILD_TYPE'} keys %options;
 	print "Trying XMAS... ";
 	print "OK\n" if &build_dyninst($xmas) && &build_testsuite($xmas);
 }
@@ -46,12 +45,7 @@ sub build {
 		for my $v (@{$opts{$o}}) {
 			my $arg = "-D$o=$v";
 			print "Trying $o=$v... ";
-			if(&build_dyninst($arg)) {
-				if($o ne 'LIGHTWEIGHT_SYMTAB') {
-					&build_testsuite($arg);
-				}
-				print "OK\n";
-			}
+			print "OK\n" if &build_dyninst($arg) && &build_testsuite($arg);
 		}
 	}
 }

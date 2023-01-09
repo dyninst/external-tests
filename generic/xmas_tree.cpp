@@ -123,7 +123,6 @@
 #include "StringTable.h"
 #include "swk_errors.h"
 #include "SymEval.h"
-#include "SymLiteCodeSource.h"
 #include "symlookup.h"
 #include "SymReader.h"
 #include "SymtabReader.h"

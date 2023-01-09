@@ -17,7 +17,6 @@ foreach(linkage "" "_static")
            Dyninst::patchAPI${linkage}
            Dyninst::pcontrol${linkage}
            Dyninst::stackwalk${linkage}
-           Dyninst::symLite${linkage}
            Dyninst::symtabAPI${linkage})
 
   add_test(xmas_tree${linkage} xmas_tree${linkage})
