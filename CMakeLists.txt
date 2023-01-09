@@ -1,7 +1,25 @@
 cmake_minimum_required(VERSION 3.13)
 project(Dyninst-External-Tests)
 
-find_package(Dyninst REQUIRED)
+set(_components
+	common
+	dynDwarf
+	dynC_API
+	dyninstAPI
+	dynElf
+	instructionAPI
+	parseAPI
+	patchAPI
+	pcontrol
+	stackwalk
+	symLite
+	symtabAPI)
+
+foreach(c ${_components})
+	list(APPEND _components "${c}_static")
+endforeach()
+
+find_package(Dyninst REQUIRED COMPONENTS ${_components})
 
 # Automatically discovers tests in subdirectories
 enable_testing()

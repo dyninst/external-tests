@@ -2,19 +2,23 @@ project(generic)
 
 # "christmas tree" test Like the "christmas tree" packet attack, this turns on
 # all the includes and library links
-add_executable(xmas_tree xmas_tree.cpp)
-target_link_libraries(xmas_tree
-  PUBLIC Dyninst::common
-         Dyninst::dynC_API
-         Dyninst::dynDwarf
-         Dyninst::dynElf
-         Dyninst::dyninstAPI
-         Dyninst::instructionAPI
-         Dyninst::parseAPI
-         Dyninst::patchAPI
-         Dyninst::pcontrol
-         Dyninst::stackwalk
-         Dyninst::symLite
-         Dyninst::symtabAPI)
 
-add_test(xmas_tree xmas_tree)
+foreach(linkage "" "_static")
+  add_executable(xmas_tree${linkage} xmas_tree.cpp)
+  target_link_libraries(
+    xmas_tree${linkage}
+    PUBLIC Dyninst::common${linkage}
+           Dyninst::dynC_API${linkage}
+           Dyninst::dynDwarf${linkage}
+           Dyninst::dynElf${linkage}
+           Dyninst::dyninstAPI${linkage}
+           Dyninst::instructionAPI${linkage}
+           Dyninst::parseAPI${linkage}
+           Dyninst::patchAPI${linkage}
+           Dyninst::pcontrol${linkage}
+           Dyninst::stackwalk${linkage}
+           Dyninst::symLite${linkage}
+           Dyninst::symtabAPI${linkage})
+
+  add_test(xmas_tree${linkage} xmas_tree${linkage})
+endforeach()

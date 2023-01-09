@@ -1,7 +1,12 @@
 project(proccontrol)
 
-add_executable(proccontrol_insertion_operators insertion_operators.cpp)
-target_link_libraries(proccontrol_insertion_operators PRIVATE Dyninst::pcontrol)
+foreach(linkage "" "_static")
+  add_executable(proccontrol_insertion_operators${linkage}
+                 insertion_operators.cpp)
+  target_link_libraries(proccontrol_insertion_operators${linkage}
+                        PRIVATE Dyninst::pcontrol${linkage})
 
-add_executable(proccontrol_includes includes.cpp)
-target_link_libraries(proccontrol_includes PRIVATE Dyninst::pcontrol)
+  add_executable(proccontrol_includes${linkage} includes.cpp)
+  target_link_libraries(proccontrol_includes${linkage}
+                        PRIVATE Dyninst::pcontrol${linkage})
+endforeach()
