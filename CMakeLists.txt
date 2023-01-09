@@ -7,6 +7,7 @@ find_package(Dyninst REQUIRED)
 enable_testing()
 
 add_subdirectory(common)
+add_subdirectory(dataflowAPI)
 add_subdirectory(dynC_API)
 add_subdirectory(dyninstAPI)
 add_subdirectory(dwarf)
