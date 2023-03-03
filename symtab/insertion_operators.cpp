@@ -1,9 +1,9 @@
+#include "Symtab.h"
+#include "Symbol.h"
 #include "Aggregate.h"
 #include "Function.h"
 #include "Module.h"
 #include "StringTable.h"
-#include "Symbol.h"
-#include "Symtab.h"
 #include "Variable.h"
 
 #include <iostream>
