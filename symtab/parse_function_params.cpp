@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 
-#include <Function.h>
 #include <Symtab.h>
+#include <Function.h>
 #include <Type.h>
 #include <Variable.h>
 
