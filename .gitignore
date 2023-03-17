@@ -1,6 +1,5 @@
-*.o
-
 # Eclipse files
 .cproject
 .project
 .settings/
+.pydevproject
