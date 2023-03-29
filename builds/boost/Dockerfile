@@ -18,5 +18,5 @@ RUN apt -qq remove --purge -y libboost*
 RUN rm -rf /dyninst build.sh
 
 # Build and install all versions of Boost
-COPY install.sh .
+COPY install.sh test.sh /
 RUN bash install.sh ${build_jobs}
