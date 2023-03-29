@@ -20,6 +20,3 @@ RUN rm -rf /dyninst build.sh
 # Build and install all versions of Boost
 COPY install.sh .
 RUN bash install.sh ${build_jobs}
-
-# Cleanup
-RUN rm -rf install.sh
