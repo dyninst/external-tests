@@ -16,13 +16,18 @@ for v in "${versions[@]}"; do
   make tbb_build_dir=install work_dir=working -j${build_jobs}
   mkdir -p /${v}/lib
   cp -R include /${v}/
-  cp working_release/*.so* /${v}/lib
+  cp working_release/*.so* working_debug/*.so* /${v}/lib
   cd cmake
   cat << END >CMakeLists.txt
 cmake_minimum_required(VERSION 3.13.0)
 project(TBB-build)
 include(TBBMakeConfig.cmake)
-tbb_make_config(TBB_ROOT /${v})
+tbb_make_config(
+  TBB_ROOT /${v}
+  CONFIG_FOR_SOURCE
+  TBB_RELEASE_DIR /${v}/lib
+  TBB_DEBUG_DIR /${v}/lib
+)
 END
   cmake .
   cd /
