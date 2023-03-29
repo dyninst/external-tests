@@ -8,7 +8,8 @@ LABEL maintainer="@hainest"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/Chicago
 
-RUN apt -qq install -y --no-install-recommends curl wget
+RUN apt-get -qq update && \
+    apt -qq install -y --no-install-recommends git ca-certificates
 
 # Remove system Boost so it doesn't interfere
 RUN apt -qq remove --purge -y libboost*
