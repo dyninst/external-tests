@@ -30,3 +30,6 @@ RUN git clone --depth=1 --branch=master https://github.com/dyninst/dyninst
 # Build and install all dependencies from source
 COPY install.sh .
 RUN bash install.sh $build_jobs
+
+# Clean up
+RUN rm -rf /dyninst /install.sh
