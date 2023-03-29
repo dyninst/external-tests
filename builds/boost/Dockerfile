@@ -1,6 +1,8 @@
 ARG base
 FROM ${base}
 
+ARG build_jobs=1
+
 LABEL maintainer="@hainest"
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -16,4 +18,4 @@ RUN rm -rf /dyninst build.sh
 
 # Build and install all versions of Boost
 COPY install.sh .
-RUN bash install.sh
+RUN bash install.sh ${build_jobs}
