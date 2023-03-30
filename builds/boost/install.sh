@@ -13,7 +13,7 @@ declare -a versions=$(git tag --list | grep -v "beta" | sed 's/boost-//' | sort 
 
 # Get the minimum version from Dyninst
 cd /
-wget --no-check-certificate https://raw.githubusercontent.com/dyninst/dyninst/master/docker/dependencies.versions
+wget --no-check-certificate https://raw.githubusercontent.com/dyninst/dyninst/cmake_modernization/docker/dependencies.versions
 min_version=$(grep boost dependencies.versions | awk '{split($0,a,":"); print a[2]}')
 
 for v in ${versions}; do
