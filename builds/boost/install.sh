@@ -32,4 +32,4 @@ for v in ${versions}; do
 done
 
 # Clean up
-rm -f dependencies.versions*
+rm -rf boost/ dependencies.versions*
