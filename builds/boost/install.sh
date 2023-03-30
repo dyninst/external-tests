@@ -18,7 +18,7 @@ min_version=$(grep boost dependencies.versions | awk '{split($0,a,":"); print a[
 
 for v in ${versions}; do
   if [[ $v < $min_version ]]; then continue; fi
-  if [[ -d $v ]]; then continue; fi
+  if [[ -f $v.tar.bz2 ]]; then continue; fi
   echo $v >>versions.txt
   wget --no-check-certificate https://boostorg.jfrog.io/artifactory/main/release/$v/source/boost_${v//./_}.tar.bz2
   tar -xf boost_${v//./_}.tar.bz2
