@@ -27,7 +27,7 @@ for v in ${versions}; do
   tar -xf elfutils-${v}.tar.bz2
   cd elfutils-${v}/
   mkdir build; cd $_
-  ../configure --enable-libdebuginfod --disable-debuginfod --prefix=/${v}
+  ../configure --disable-libdebuginfod --disable-debuginfod --prefix=/${v}
   make install -j${build_jobs}
   cd /
   rm -rf elfutils-${v}/ elfutils-${v}.tar.bz2
