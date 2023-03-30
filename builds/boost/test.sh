@@ -14,7 +14,8 @@ cd build
 
 while read -r version; do
   echo Build Dyninst with Boost $version
-  cmake /dyninst -DBoost_ROOT_DIR=/$version -DDYNINST_WARNINGS_AS_ERRORS=ON
+  tar -xf /$version.tar.bz2
+  cmake /dyninst -DBoost_ROOT_DIR=./$version -DDYNINST_WARNINGS_AS_ERRORS=ON
   cmake --build . --parallel $build_jobs
   rm -rf *
 done </versions.txt
