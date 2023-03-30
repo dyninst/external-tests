@@ -27,6 +27,8 @@ for v in ${versions}; do
   ./b2 --prefix=/$v --layout=versioned variant=release link=shared threading=multi runtime-link=shared install -j${build_jobs}
   cd /
   rm -rf boost_${v//./_} boost_${v//./_}.tar.bz2
+  tar -zcf ${v}.tar.bz2 ${v}/
+  rm -rf ${v}/
 done
 
 # Clean up
