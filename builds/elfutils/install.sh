@@ -1,7 +1,7 @@
 #!/bin/bash
 
 build_jobs=$1
-if x"${build_jobs}" = "x"; then
+if test x"${build_jobs}" = "x"; then
   build_jobs=1
 fi
 
