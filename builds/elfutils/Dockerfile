@@ -19,5 +19,5 @@ RUN rm -rf /usr/local/include/{dwarf.h,gelf.h,libelf.h,elfutils} /usr/local/lib/
 RUN rm -rf /dyninst build.sh
 
 # Build and install all versions of elfutils
-COPY build.sh .
-RUN bash build.sh $build_jobs
+COPY install.sh test.sh /
+RUN bash install.sh $build_jobs
