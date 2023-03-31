@@ -5,11 +5,11 @@ if test x"${build_jobs}" = "x"; then
   build_jobs=1
 fi
 
-# Fetch the versions
+# Fetch the versions in ascending order
 git clone --depth=1 git://sourceware.org/git/elfutils.git
 cd elfutils
 git fetch --tags
-declare -a versions=$(git tag --list | grep "elfutils" | sed 's/elfutils-//' | sort -rV)
+declare -a versions=$(git tag --list | grep "elfutils" | sed 's/elfutils-//' | sort -V)
 
 # Get the minimum version from Dyninst
 cd /
