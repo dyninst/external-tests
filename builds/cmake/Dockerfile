@@ -8,13 +8,14 @@ LABEL maintainer="@hainest"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/Chicago
 
-RUN apt -qq install -y --no-install-recommends curl wget libssl-dev
+RUN apt-get -qq update && \
+    apt -qq install -y --no-install-recommends git ca-certificates
 
 # Remove unneeded Dyninst files
 RUN rm -rf /dyninst build.sh
 
 # Build and install all versions of cmake
-COPY install.sh .
+COPY install.sh test.sh /
 RUN bash install.sh $build_jobs
 
 # Remove system cmake so it doesn't interfere
