@@ -1,5 +1,4 @@
-ARG base
-FROM ${base}
+FROM ubuntu:20.04
 
 ARG build_jobs=1
 
@@ -24,12 +23,5 @@ RUN apt-get -qq update && \
     m4              \
     libiberty-dev
 
-# Get a copy of Dyninst so we can use the docker/dependencies.versions file
-RUN git clone --depth=1 --branch=master https://github.com/dyninst/dyninst
-
 # Build and install all dependencies from source
-COPY install.sh .
-RUN bash install.sh $build_jobs
-
-# Clean up
-RUN rm -rf /dyninst /install.sh
+COPY test.sh /
