@@ -9,12 +9,12 @@ fi
 
 git clone --depth=1 --branch=cmake_modernization https://github.com/dyninst/dyninst
 
-mkdir build
-cd build
+rm -rf build; mkdir build; cd $_
 
 while read -r version; do
   echo Build Dyninst with CMake $version
-  $version/bin/cmake /dyninst -DBoost_ROOT_DIR=/$version -DDYNINST_WARNINGS_AS_ERRORS=ON
-  $version/bin/cmake --build . --parallel $build_jobs
+  tar -xf /cmake-$version.tar.bz2
+  bin/cmake /dyninst -DDYNINST_WARNINGS_AS_ERRORS=ON
+  bin/cmake --build . --parallel $build_jobs
   rm -rf *
 done </versions.txt
