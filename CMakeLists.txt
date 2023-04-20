@@ -7,6 +7,10 @@ find_package(Boost REQUIRED)
 set (CMAKE_MODULE_PATH "${Dyninst_DIR}" "${Dyninst_DIR}/Modules" ${CMAKE_MODULE_PATH})
 include(ThreadingBuildingBlocks)
 
+# Automatically discovers tests in subdirectories
+enable_testing()
+
+
 add_subdirectory(common)
 add_subdirectory(dataflowAPI)
 add_subdirectory(dyninstAPI)
