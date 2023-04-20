@@ -26,6 +26,7 @@ jobs:
            flags="-DCMAKE_C_FLAGS='-Werror' -DCMAKE_CXX_FLAGS='-Werror'"
            cmake . -DDyninst_DIR=/dyninst/install/lib/cmake/Dyninst $flags
            cmake --build .
+           ctest .
 
   clang:
     permissions:
@@ -42,10 +43,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: tests
-      - name: Install clang
-        run: |
-            apt update -qq
-            apt install -qq --no-install-recommends clang
       - name: Build tests
         run: |
            cd tests
@@ -53,3 +50,4 @@ jobs:
            flags="$flags -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ "
            cmake . -DDyninst_DIR=/dyninst/install/lib/cmake/Dyninst $flags
            cmake --build .
+           ctest .
