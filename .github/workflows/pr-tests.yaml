@@ -1,0 +1,55 @@
+name: Pull Request Tests
+
+on:
+  pull_request:
+     branches:
+        - master
+jobs:
+  gcc:
+    permissions:
+      packages: read
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/dyninst/amd64/ubuntu-20.04:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    name: gcc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: tests
+      - name: Build tests
+        run: |
+           cd tests
+           flags="-DCMAKE_C_FLAGS='-Werror' -DCMAKE_CXX_FLAGS='-Werror'"
+           cmake . -DDyninst_DIR=/dyninst/install/lib/cmake/Dyninst $flags
+           cmake --build .
+
+  clang:
+    permissions:
+      packages: read
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/dyninst/amd64/ubuntu-20.04:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    name: clang
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: tests
+      - name: Install clang
+        run: |
+            sudo apt update -qq
+            sudo apt install -qq --no-install-recommends clang
+      - name: Build tests
+        run: |
+           cd tests
+           flags="-DCMAKE_C_FLAGS='-Werror' -DCMAKE_CXX_FLAGS='-Werror' "
+           flags+="-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ "
+           cmake . -DDyninst_DIR=/dyninst/install/lib/cmake/Dyninst $flags
+           cmake --build .
