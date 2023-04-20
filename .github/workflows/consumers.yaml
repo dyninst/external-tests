@@ -3,8 +3,11 @@
 name: Build Consumers
 
 on:
-  schedule:
-    - cron: '0 4 * * 0' # every Sunday at 4AM
+  pull_request:
+    branches:
+      - master
+#  schedule:
+#    - cron: '0 2 3 * *' # Every 3rd of the month
 
 jobs:
   build:
