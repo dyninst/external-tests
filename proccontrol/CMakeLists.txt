@@ -1,6 +1,9 @@
 project(proccontrol)
 
-add_executable(pc_insertion_operators insertion_operators.cpp)
-set_target_properties(pc_insertion_operators PROPERTIES OUTPUT_NAME insertion_operators)
-target_include_directories(pc_insertion_operators PRIVATE ${DYNINST_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
-target_link_libraries(pc_insertion_operators PRIVATE pcontrol)
+add_executable(proccontrol_insertion_operators insertion_operators.cpp)
+target_include_directories(proccontrol_insertion_operators PRIVATE ${DYNINST_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${TBB_INCLUDE_DIRS})
+target_link_libraries(proccontrol_insertion_operators PRIVATE pcontrol)
+
+add_executable(proccontrol_includes includes.cpp)
+target_include_directories(proccontrol_includes PRIVATE ${DYNINST_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${TBB_INCLUDE_DIRS})
+target_link_libraries(proccontrol_includes PRIVATE pcontrol)
