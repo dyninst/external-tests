@@ -1,0 +1,24 @@
+# Build the latest versions of applications that consume Dyninst
+
+name: Build Consumers
+
+on:
+  schedule:
+    - cron: '0 4 * * 0' # every Sunday at 4AM
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        consumer: ["hpctoolkit", "stat ^intel-tbb@2018.6", "must+stackwalker"]
+    runs-on: ubuntu-latest
+    steps:
+    - name: ${{ matrix.consumer }}
+      run: |
+        apt update -qq
+        apt install -y -qq --no-install-recommends build-essential gcc g++ gfortran m4 cmake autoconf python3 git unzip
+        git clone --depth=1 --branch=develop https://github.com/spack/spack
+        spack/bin/spack compiler find
+        spack/bin/spack external find --not-buildable cmake
+        spack/bin/spack install ${{ matrix.consumer }} ^dyninst@master
