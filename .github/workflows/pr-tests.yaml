@@ -44,8 +44,8 @@ jobs:
           path: tests
       - name: Install clang
         run: |
-            sudo apt update -qq
-            sudo apt install -qq --no-install-recommends clang
+            apt update -qq
+            apt install -qq --no-install-recommends clang
       - name: Build tests
         run: |
            cd tests
