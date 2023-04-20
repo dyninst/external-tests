@@ -10,7 +10,6 @@ include(ThreadingBuildingBlocks)
 # Automatically discovers tests in subdirectories
 enable_testing()
 
-
 add_subdirectory(common)
 add_subdirectory(dataflowAPI)
 add_subdirectory(dwarf)
