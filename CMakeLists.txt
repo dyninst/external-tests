@@ -12,8 +12,9 @@ enable_testing()
 
 
 add_subdirectory(common)
-add_subdirectory(dwarf)
 add_subdirectory(dataflowAPI)
+add_subdirectory(dwarf)
+add_subdirectory(dynC_API)
 add_subdirectory(dyninstAPI)
 add_subdirectory(generic)
 add_subdirectory(proccontrol)
