@@ -50,6 +50,6 @@ jobs:
         run: |
            cd tests
            flags="-DCMAKE_C_FLAGS='-Werror' -DCMAKE_CXX_FLAGS='-Werror' "
-           flags+="-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ "
+           flags="$flags -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ "
            cmake . -DDyninst_DIR=/dyninst/install/lib/cmake/Dyninst $flags
            cmake --build .
