@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        consumer: ["hpctoolkit", "must+stackwalker"]
+        consumer: ["hpctoolkit", "must+stackwalker ^intel-tbb@2018.6"]
     runs-on: ubuntu-latest
     steps:
     - name: ${{ matrix.consumer }}
