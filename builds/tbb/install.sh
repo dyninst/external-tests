@@ -39,7 +39,7 @@ declare -a versions=$(git tag --list | grep -P "^\d{4}|^v" | grep -v "\-" | sort
 # Get the minimum version from Dyninst
 cd /
 rm -f dependencies.versions
-wget --no-check-certificate https://raw.githubusercontent.com/dyninst/dyninst/cmake_modernization/docker/dependencies.versions
+wget --no-check-certificate https://raw.githubusercontent.com/dyninst/dyninst/master/docker/dependencies.versions
 min_version=$(grep tbb dependencies.versions | awk '{split($0,a,":"); print a[2]}')
 
 # For versions 2019.X, the archives are named 2019_UX

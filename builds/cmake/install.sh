@@ -22,7 +22,7 @@ declare -a versions=$(git tag --list | grep -v "\-rc" | sort -rV)
 # Get the minimum version from Dyninst
 cd /
 rm -f dependencies.versions
-wget --no-check-certificate https://raw.githubusercontent.com/dyninst/dyninst/cmake_modernization/docker/dependencies.versions
+wget --no-check-certificate https://raw.githubusercontent.com/dyninst/dyninst/master/docker/dependencies.versions
 min_version=$(grep cmake dependencies.versions | awk '{split($0,a,":"); print a[2]}')
 min_version=$(format_cmake_version $min_version)
 
