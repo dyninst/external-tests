@@ -5,4 +5,4 @@ target_link_libraries(common_insertion_operators PRIVATE Dyninst::common)
 
 add_executable(common_includes includes.cpp)
 target_link_libraries(common_includes PRIVATE Dyninst::common)
-add_test(common_includes common_includes)
+add_test(NAME common_includes COMMAND common_includes)
