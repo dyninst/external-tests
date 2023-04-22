@@ -10,4 +10,9 @@ To configure the build, you can use
 
     cmake . -DDyninst_DIR=path/to/Dyninst/install/lib/cmake/Dyninst
     cmake --build .
+
+## Running
+
+Most of the tests are designed to examine some aspect of compiling or linking Dyninst. There are, however, a few tests that have a runtime aspect. These tests can be run using CTest like so:
+
     ctest .
