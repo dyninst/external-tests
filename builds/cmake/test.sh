@@ -2,6 +2,9 @@
 
 set -e
 
+num_jobs=1
+log_file="/dev/null"
+
 while [[ $# -gt 0 ]]; do
   case $1 in
     -n|--num-jobs)
