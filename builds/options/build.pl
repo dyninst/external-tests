@@ -1,7 +1,11 @@
 use strict;
 use warnings;
+use Getopt::Long qw(GetOptions);
 
-die "BUILD_TEST_NUM_JOBS is not set\n" unless exists $ENV{'BUILD_TEST_NUM_JOBS'};
+my %args = (
+  'num-jobs' => $ENV{'BUILD_TEST_NUM_JOBS'} // 1
+);
+GetOptions(\%args, 'num-jobs=i');
 
 my %options = (
   'ADD_VALGRIND_ANNOTATIONS' => ['ON'],                                                 # default OFF
@@ -53,7 +57,7 @@ sub build_dyninst {
   my $ret = system("
       cd /; rm -rf dyninst-build; mkdir dyninst-build; cd dyninst-build
       cmake /dyninst/src -DCMAKE_INSTALL_PREFIX=. -DDYNINST_WARNINGS_AS_ERRORS=ON $_[0] >/dev/null 2>&1
-      cmake --build . --parallel $ENV{'BUILD_TEST_NUM_JOBS'} >/dev/null 2>&1
+      cmake --build . --parallel $args{'num-jobs'} >/dev/null 2>&1
       cmake --install . >/dev/null 2>&1
     "
   );
@@ -69,7 +73,7 @@ sub build_testsuite {
   my $ret = system("
       cd /; rm -rf testsuite-build; mkdir testsuite-build; cd testsuite-build;
       cmake /testsuite/src -DCMAKE_INSTALL_PREFIX=. -DDyninst_DIR=/dyninst-build/lib/cmake/Dyninst >/dev/null 2>&1
-      cmake --build . --parallel $ENV{'BUILD_TEST_NUM_JOBS'} >/dev/null 2>&1
+      cmake --build . --parallel $args{'num-jobs'} >/dev/null 2>&1
       cmake --install . >/dev/null 2>&1
     "
   );
