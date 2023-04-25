@@ -20,5 +20,5 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-git clone --depth 1 --branch cmake_modernization https://github.com/dyninst/testsuite testsuite/src
+git clone --depth 1 --branch master https://github.com/dyninst/testsuite testsuite/src
 perl build.pl --num-jobs=$num_jobs --log-file=$log_file
