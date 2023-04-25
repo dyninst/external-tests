@@ -14,7 +14,7 @@ declare -a versions=$(git tag --list | grep "elfutils" | sed 's/elfutils-//' | s
 # Get the minimum version from Dyninst
 cd /
 rm -f dependencies.versions
-wget --no-check-certificate https://raw.githubusercontent.com/dyninst/dyninst/cmake_modernization/docker/dependencies.versions
+wget --no-check-certificate https://raw.githubusercontent.com/dyninst/dyninst/master/docker/dependencies.versions
 min_version=$(grep elfutils dependencies.versions | awk '{split($0,a,":"); print a[2]}')
 
 # Clean up

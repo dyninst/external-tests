@@ -20,7 +20,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-git clone --depth=1 --branch=cmake_modernization https://github.com/dyninst/dyninst
+git clone --depth=1 --branch=master https://github.com/dyninst/dyninst
 
 rm -rf build; mkdir build; cd $_
 

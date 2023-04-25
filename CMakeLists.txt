@@ -1,13 +1,8 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.14.0 FATAL_ERROR)
 project(Dyninst-External-Tests)
 
-find_package(Dyninst REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Dyninst 12.3.0 REQUIRED)
 
-set (CMAKE_MODULE_PATH "${Dyninst_DIR}" "${Dyninst_DIR}/Modules" ${CMAKE_MODULE_PATH})
-include(ThreadingBuildingBlocks)
-
-# Automatically discovers tests in subdirectories
 enable_testing()
 
 add_subdirectory(common)

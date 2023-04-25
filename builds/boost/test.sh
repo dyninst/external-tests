@@ -21,7 +21,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 
-git clone --depth=1 --branch=cmake_modernization https://github.com/dyninst/dyninst
+git clone --depth=1 --branch=master https://github.com/dyninst/dyninst
 
 mkdir build
 cd build
