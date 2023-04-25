@@ -1,7 +1,12 @@
 use strict;
 use warnings;
+use Getopt::Long qw(GetOptions);
 
-die "BUILD_TEST_NUM_JOBS is not set\n" unless exists $ENV{'BUILD_TEST_NUM_JOBS'};
+my %args = (
+  'log-file'  => '/dev/null',
+  'num-jobs' => $ENV{'BUILD_TEST_NUM_JOBS'} // 1
+);
+GetOptions(\%args, 'log-file=s', 'num-jobs=i');
 
 my %options = (
   'ADD_VALGRIND_ANNOTATIONS' => ['ON'],                                                 # default OFF
@@ -52,9 +57,9 @@ die "Failed\n" if $build_failed;
 sub build_dyninst {
   my $ret = system("
       cd /; rm -rf dyninst-build; mkdir dyninst-build; cd dyninst-build
-      cmake /dyninst/src -DCMAKE_INSTALL_PREFIX=. -DDYNINST_WARNINGS_AS_ERRORS=ON $_[0] >/dev/null 2>&1
-      cmake --build . --parallel $ENV{'BUILD_TEST_NUM_JOBS'} >/dev/null 2>&1
-      cmake --install . >/dev/null 2>&1
+      cmake /dyninst/src -DCMAKE_INSTALL_PREFIX=. -DDYNINST_WARNINGS_AS_ERRORS=ON $_[0] >>$args{'log-file'} 2>&1
+      cmake --build . --parallel $args{'num-jobs'} >>$args{'log-file'} 2>&1
+      cmake --install . >>$args{'log-file'} 2>&1
     "
   );
   if ($ret != 0) {
@@ -68,9 +73,9 @@ sub build_dyninst {
 sub build_testsuite {
   my $ret = system("
       cd /; rm -rf testsuite-build; mkdir testsuite-build; cd testsuite-build;
-      cmake /testsuite/src -DCMAKE_INSTALL_PREFIX=. -DDyninst_DIR=/dyninst-build/lib/cmake/Dyninst >/dev/null 2>&1
-      cmake --build . --parallel $ENV{'BUILD_TEST_NUM_JOBS'} >/dev/null 2>&1
-      cmake --install . >/dev/null 2>&1
+      cmake /testsuite/src -DCMAKE_INSTALL_PREFIX=\$PWD/install -DDyninst_DIR=/dyninst-build/lib/cmake/Dyninst >>$args{'log-file'} 2>&1
+      cmake --build . --parallel $args{'num-jobs'} >>$args{'log-file'} 2>&1
+      cmake --install . >>$args{'log-file'} 2>&1
     "
   );
   if ($ret != 0) {
