@@ -73,7 +73,7 @@ sub build_dyninst {
 sub build_testsuite {
   my $ret = system("
       cd /; rm -rf testsuite-build; mkdir testsuite-build; cd testsuite-build;
-      cmake /testsuite/src -DCMAKE_INSTALL_PREFIX=. -DDyninst_DIR=/dyninst-build/lib/cmake/Dyninst >>$args{'log-file'} 2>&1
+      cmake /testsuite/src -DCMAKE_INSTALL_PREFIX=\$PWD/install -DDyninst_DIR=/dyninst-build/lib/cmake/Dyninst >>$args{'log-file'} 2>&1
       cmake --build . --parallel $args{'num-jobs'} >>$args{'log-file'} 2>&1
       cmake --install . >>$args{'log-file'} 2>&1
     "
