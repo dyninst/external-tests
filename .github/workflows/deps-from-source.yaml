@@ -1,0 +1,24 @@
+# Build Dyninst using latest sources for dependencies
+
+name: Deps from latest sources
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    permissions:
+      packages: read
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/dyninst/amd64/external-tests/deps-from-latest-source:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    name: build
+    steps:
+      - name: build
+        run: |
+          bash tests.sh -n 2 -l stdout
