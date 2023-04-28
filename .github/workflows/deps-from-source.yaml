@@ -21,6 +21,5 @@ jobs:
     steps:
       - name: build
         run: |
-          pwd
-          ls -la --color /
-          #bash tests.sh -n 2 -l stdout
+          cd /
+          bash tests.sh -n 2 -l stdout
