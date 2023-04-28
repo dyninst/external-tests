@@ -21,7 +21,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Update sources
-for d in elfutils boost tbb dyninst; do
+for d in elfutils boost tbb; do
   git -C /$d-src pull
 done
 
@@ -39,6 +39,13 @@ cmake . -DCMAKE_INSTALL_PREFIX=/tbb -DTBB_TEST=OFF -DCMAKE_BUILD_TYPE=Release >>
 cmake --build . --parallel ${num_jobs} >>$log_file 2>&1
 cmake --install . >>$log_file 2>&1
 
-cd /dyninst-src
-cmake . -DBoost_ROOT_DIR=/boost -DTBB_ROOT_DIR=/tbb -DElfUtils_ROOT_DIR=/elfutils -DDYNINST_WARNINGS_AS_ERRORS=ON >>$log_file 2>&1
+git clone --depth=1 --branch=master https://github.com/dyninst/dyninst /dyninst
+cd /dyninst
+cmake . -DCMAKE_INSTALL_PREFIX=$PWD/install -DBoost_ROOT_DIR=/boost -DTBB_ROOT_DIR=/tbb -DElfUtils_ROOT_DIR=/elfutils -DDYNINST_WARNINGS_AS_ERRORS=ON >>$log_file 2>&1
+cmake --build . --parallel $num_jobs >>$log_file 2>&1
+cmake --install . >>$log_file 2>&1
+
+git clone --depth=1 --branch=master https://github.com/dyninst/testsuite /testsuite
+cd /testsuite
+cmake . -DDyninst_DIR=/dyninst/install/lib/cmake/Dyninst -DBoost_ROOT_DIR=/boost -DTBB_ROOT_DIR=/tbb -DElfUtils_ROOT_DIR=/elfutils >>$log_file 2>&1
 cmake --build . --parallel $num_jobs >>$log_file 2>&1
