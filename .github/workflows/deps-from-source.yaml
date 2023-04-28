@@ -22,4 +22,4 @@ jobs:
       - name: build
         run: |
           cd /
-          bash tests.sh -n 2 -l stdout
+          bash test.sh -n 2 -l stdout
