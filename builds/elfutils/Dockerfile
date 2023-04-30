@@ -16,7 +16,7 @@ RUN apt -qq remove --purge -y elfutils* libelf* libdw* libdebug*
 RUN rm -rf /usr/local/include/{dwarf.h,gelf.h,libelf.h,elfutils} /usr/local/lib/lib{elf,dw,debuginfod}*.so
 
 # Remove unneeded Dyninst files
-RUN rm -rf /dyninst build.sh
+RUN rm -rf build.sh
 
 # Build and install all versions of elfutils
 COPY install.sh test.sh /
