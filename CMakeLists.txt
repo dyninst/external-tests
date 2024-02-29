@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14.0 FATAL_ERROR)
 project(Dyninst-External-Tests)
 
-find_package(Dyninst 12.3.0 REQUIRED)
+find_package(Dyninst 13.0.0 REQUIRED)
 
 enable_testing()
 
