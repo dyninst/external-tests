@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.14.0 FATAL_ERROR)
 project(Dyninst-External-Tests)
 
+# Not all systems have static libs (e.g., libc.a)
+option(
+  DYNINST_DISABLE_STATIC_TESTS
+  "Disable building and executing statically-linked tests"
+  OFF
+)
+
 find_package(Dyninst 13.0.0 REQUIRED)
 
 enable_testing()
