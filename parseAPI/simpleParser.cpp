@@ -11,6 +11,10 @@ int main(int argc, char* argv[]) {
 
   try {
     auto* sts = new dp::SymtabCodeSource(argv[1]);
+    if (!sts->getSymtabObject())  {
+	std::cerr << "failed to create symtab object\n";
+	return -1;
+    }
     auto* co = new dp::CodeObject(sts);
     co->parse();
   } catch(std::exception &e) {
