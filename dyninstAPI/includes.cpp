@@ -5,7 +5,6 @@
 #include "BPatch_basicBlockLoop.h"
 #include "BPatch_binaryEdit.h"
 #include "BPatch_callbacks.h"
-#include "BPatch_dll.h"
 #include "BPatch_edge.h"
 #include "BPatch_enums.h"
 #include "BPatch_flowGraph.h"
