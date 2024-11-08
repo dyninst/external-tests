@@ -23,7 +23,7 @@ jobs:
       - name: Build tests
         run: |
            cd tests
-           flags="-DCMAKE_C_FLAGS='-Werror' -DCMAKE_CXX_FLAGS='-Werror'"
+           flags="-DCMAKE_C_FLAGS='-Werror' -DCMAKE_CXX_FLAGS='-Werror' -DCMAKE_CXX_STANDARD=17"
            cmake . -DDyninst_DIR=/dyninst/install/lib/cmake/Dyninst $flags
            cmake --build .
       - name: Run tests
@@ -49,7 +49,7 @@ jobs:
       - name: Build tests
         run: |
            cd tests
-           flags="-DCMAKE_C_FLAGS='-Werror' -DCMAKE_CXX_FLAGS='-Werror' "
+           flags="-DCMAKE_C_FLAGS='-Werror' -DCMAKE_CXX_FLAGS='-Werror' -DCMAKE_CXX_STANDARD=17"
            flags="$flags -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ "
            cmake . -DDyninst_DIR=/dyninst/install/lib/cmake/Dyninst $flags
            cmake --build .
