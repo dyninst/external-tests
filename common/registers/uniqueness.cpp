@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 /*
  * Ensure all registers for an architecture have unique representations
