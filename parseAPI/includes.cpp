@@ -3,7 +3,6 @@
 #include "CFGModifier.h"
 #include "CodeObject.h"
 #include "CodeSource.h"
-#include "InstructionAdapter.h"
 #include "InstructionSource.h"
 #include "Location.h"
 #include "LockFreeQueue.h"
