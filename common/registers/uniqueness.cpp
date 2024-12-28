@@ -25,6 +25,9 @@ dup_map known_dups = {
   },
   {Dyninst::Arch_x86, {}},
   {Dyninst::Arch_x86_64, {}},
+  {Dyninst::Arch_amdgpu_gfx908, {}},
+  {Dyninst::Arch_amdgpu_gfx90a, {}},
+  {Dyninst::Arch_amdgpu_gfx940, {}},
 };
 
 bool check(Dyninst::Architecture arch) {
@@ -65,6 +68,15 @@ int main() {
     status = EXIT_FAILURE;
   }
   if(!check(Dyninst::Arch_ppc64)) {
+    status = EXIT_FAILURE;
+  }
+  if(!check(Dyninst::Arch_amdgpu_gfx908)) {
+    status = EXIT_FAILURE;
+  }
+  if(!check(Dyninst::Arch_amdgpu_gfx90a)) {
+    status = EXIT_FAILURE;
+  }
+  if(!check(Dyninst::Arch_amdgpu_gfx940)) {
     status = EXIT_FAILURE;
   }
   return status;
