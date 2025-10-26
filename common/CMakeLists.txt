@@ -1,7 +1,5 @@
 project(common)
 
-add_subdirectory(registers)
-
 add_executable(common_insertion_operators insertion_operators.cpp)
 target_link_libraries(common_insertion_operators PRIVATE Dyninst::common)
 
