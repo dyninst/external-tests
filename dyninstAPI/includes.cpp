@@ -16,7 +16,6 @@
 #include "BPatch_memoryAccess_NP.h"
 #include "BPatch_module.h"
 #include "BPatch_object.h"
-#include "BPatch_parRegion.h"
 #include "BPatch_point.h"
 #include "BPatch_process.h"
 #include "BPatch_Set.h"
