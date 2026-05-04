@@ -18,7 +18,6 @@
 #include "BPatch_object.h"
 #include "BPatch_point.h"
 #include "BPatch_process.h"
-#include "BPatch_Set.h"
 #include "BPatch_snippet.h"
 #include "BPatch_sourceBlock.h"
 #include "BPatch_sourceObj.h"
