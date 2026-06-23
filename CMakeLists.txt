@@ -10,7 +10,7 @@ option(
 
 find_package(Dyninst 13.0.0 REQUIRED)
 
-enable_testing()
+include(CTest)
 
 add_subdirectory(common)
 add_subdirectory(dataflowAPI)
