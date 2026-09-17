@@ -3,9 +3,9 @@ project(Dyninst-External-Tests)
 
 # Not all systems have static libs (e.g., libc.a)
 option(
-  DYNINST_DISABLE_STATIC_TESTS
-  "Disable building and executing statically-linked tests"
-  OFF
+  DYNINST_ENABLE_STATIC_TESTS
+  "Enable building and executing statically-linked tests"
+  ON
 )
 
 find_package(Dyninst 13.0.0 REQUIRED)
