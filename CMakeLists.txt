@@ -8,6 +8,14 @@ option(
   ON
 )
 
+# Tests that drive a live process (create, attach, dlopen) need ProcControl.
+# Turning this off leaves the tests that only rewrite files on disk.
+option(
+  DYNINST_ENABLE_DYNAMIC_TESTS
+  "Enable building and executing tests that drive a live process"
+  ON
+)
+
 find_package(Dyninst 13.0.0 REQUIRED)
 
 include(CTest)

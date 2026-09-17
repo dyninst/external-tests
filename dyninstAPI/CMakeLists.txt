@@ -10,3 +10,5 @@ target_link_libraries(dyninstAPI_includes PRIVATE Dyninst::dyninstAPI)
 if(DYNINST_ENABLE_STATIC_TESTS)
   add_subdirectory(static_ctors_dtors)
 endif()
+
+add_subdirectory(analysis_exclusion)
