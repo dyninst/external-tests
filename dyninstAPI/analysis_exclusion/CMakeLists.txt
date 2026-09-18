@@ -35,12 +35,16 @@ add_dependencies(exclusion_test exclusion_mutatee exclusion_toc exclusion_plugA
 set(_dynamic_scenarios create attach dlopen)
 set(_static_scenarios rewrite rewrite-dep)
 
-set(_scenarios ${_static_scenarios})
+# When dynamic tests are off they are still registered, and report
+# themselves skipped, rather than vanishing: a test that is absent looks the
+# same as a test nobody wrote.
 if(DYNINST_ENABLE_DYNAMIC_TESTS)
-  list(APPEND _scenarios ${_dynamic_scenarios})
+  target_compile_definitions(exclusion_test PRIVATE DYNINST_ENABLE_DYNAMIC_TESTS=1)
+else()
+  target_compile_definitions(exclusion_test PRIVATE DYNINST_ENABLE_DYNAMIC_TESTS=0)
 endif()
 
-foreach(_s ${_scenarios})
+foreach(_s ${_static_scenarios} ${_dynamic_scenarios})
   add_test(NAME dyninstAPI_analysis_exclusion_${_s}
            COMMAND exclusion_test ${_s}
            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
@@ -51,4 +55,6 @@ foreach(_s ${_scenarios})
     TEST dyninstAPI_analysis_exclusion_${_s}
     PROPERTY ENVIRONMENT
              "DYNINSTAPI_RT_LIB=$<TARGET_FILE:Dyninst::dyninstAPI_RT>")
+  # matches kSkipExitCode in exclusion_test.cpp
+  set_property(TEST dyninstAPI_analysis_exclusion_${_s} PROPERTY SKIP_RETURN_CODE 77)
 endforeach()

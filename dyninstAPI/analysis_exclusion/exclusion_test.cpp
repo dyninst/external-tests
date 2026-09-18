@@ -129,6 +129,30 @@ static std::string scenarioNames(const std::string &separator)
     return joined;
 }
 
+// Reported to ctest as "skipped" rather than passed or failed; matches
+// SKIP_RETURN_CODE in CMakeLists.txt.
+static const int kSkipExitCode = 77;
+
+#ifndef DYNINST_ENABLE_DYNAMIC_TESTS
+#define DYNINST_ENABLE_DYNAMIC_TESTS 1
+#endif
+
+
+// create, attach and dlopen drive a live process.  The rewriting scenarios
+// only rewrite files on disk.
+static bool isDynamicScenario(Scenario scenario)
+{
+    return scenario == Scenario::Create || scenario == Scenario::Attach
+           || scenario == Scenario::Dlopen;
+}
+
+
+static bool scenarioSkipped(Scenario scenario)
+{
+    return isDynamicScenario(scenario) && !DYNINST_ENABLE_DYNAMIC_TESTS;
+}
+
+
 static int failures = 0;
 
 // The excluded libraries carry a couple of hundred branchy functions, well over
@@ -887,6 +911,12 @@ static int runScenario(const std::string &self, Scenario scenario)
     std::string name = scenarioName(scenario);
 
     std::printf("=== %s ===\n", name.c_str());
+    if (scenarioSkipped(scenario))  {
+        std::printf("  skipped: needs a live process, and this build was "
+                    "configured with DYNINST_ENABLE_DYNAMIC_TESTS=OFF\n");
+        std::printf("=== %s: skipped ===\n\n", name.c_str());
+        return kSkipExitCode;
+    }
     int bad = 0;
     std::vector<std::string> ran(2);
     std::vector<AnalysisTotals> totals(2);
@@ -1066,7 +1096,6 @@ int main(int argc, char **argv)
     showDurations = !runningUnderCtest();
     double started = nowSeconds();
 
-    int bad = 0;
     if (argc == 2)  {
         auto found = scenarioByName().find(argv[1]);
         if (found == scenarioByName().end())  {
@@ -1075,14 +1104,27 @@ int main(int argc, char **argv)
                          scenarioNames(", ").c_str());
             return 2;
         }
-        bad = runScenario(self, found->second);
-    }  else  {
-        // every scenario, verbosely
-        for (auto const &scenario : allScenarios())
-            if (runScenario(self, scenario) != 0)
-                bad = 1;
-        std::printf("%s (%.3f sec)\n", bad ? "FAILURES" : "ALL PASS",
-                    elapsedSeconds(started));
+        // one scenario: this is also how ctest runs us, and kSkipExitCode
+        // reaches it as "skipped"
+        return runScenario(self, found->second);
     }
+
+    // every scenario, verbosely
+    int bad = 0;
+    int skipped = 0;
+    for (auto const &scenario : allScenarios())  {
+        int rc = runScenario(self, scenario);
+        if (rc == kSkipExitCode)
+            skipped++;
+        else if (rc != 0)
+            bad = 1;
+    }
+    double took = elapsedSeconds(started);
+    if (bad)
+        std::printf("FAILURES (%.3f sec)\n", took);
+    else if (skipped)
+        std::printf("ALL PASS (%d skipped, %.3f sec)\n", skipped, took);
+    else
+        std::printf("ALL PASS (%.3f sec)\n", took);
     return bad;
 }
