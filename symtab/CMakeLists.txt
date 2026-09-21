@@ -8,6 +8,7 @@ target_link_libraries(st_insertion_operators PRIVATE Dyninst::symtabAPI)
 
 add_subdirectory(enum)
 add_subdirectory(module)
+add_subdirectory(DWARF)
 
 add_executable(symtab_includes includes.cpp)
 target_link_libraries(symtab_includes PRIVATE Dyninst::symtabAPI)
