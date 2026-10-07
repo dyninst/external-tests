@@ -718,8 +718,13 @@ static int sceneRewrite(BPatch &bpatch, bool exclude, bool intoDep)
           intoDep ? "snippet inserted into the dependency"
                   : "snippet inserted into the executable");
 
-    check(be->writeFile("out/mutatee"), "writeFile produced the rewritten binary");
+    // Measure before writing.  emitElf assigns a symbol index to every
+    // synthesized symbol it emits, so after writeFile getIndex() >= 0 is true
+    // of everything and no longer says whether a function came from the ELF
+    // symbol table.
     recordAnalysisTotals(img);
+
+    check(be->writeFile("out/mutatee"), "writeFile produced the rewritten binary");
     return 0;
 }
 
