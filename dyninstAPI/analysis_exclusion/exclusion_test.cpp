@@ -55,7 +55,9 @@
 #include <cstdlib>
 #include <cctype>
 #include <cstring>
+#include <algorithm>
 #include <fstream>
+#include <iterator>
 #include <map>
 #include <string>
 #include <vector>
@@ -366,8 +368,39 @@ static AnalysisTotals analysisTotals(BPatch_image *img)
 
 // The worker leaves its count here for the parent to compare.  The working
 // directory is this run's own, so the two halves cannot collide.
+// The counts say a function went missing; this says which one.  Written
+// beside the counts so a failing comparison can diff the two runs.
+static void recordPresentNames(BPatch_image *img)
+{
+    std::vector<std::string> lines;
+    std::vector<BPatch_object *> objs;
+    img->getObjects(objs);
+    for (auto *obj : objs)  {
+        Dyninst::SymtabAPI::Symtab *sym = Dyninst::SymtabAPI::convert(obj);
+        if (sym == NULL)
+            continue;
+        std::string path = obj->pathName();
+        size_t slash = path.find_last_of('/');
+        std::string base = (slash == std::string::npos) ? path : path.substr(slash + 1);
+        for (auto *func : sym->getAllFunctionsRef())  {
+            char addr[32];
+            std::snprintf(addr, sizeof addr, "%lx",
+                          (unsigned long) func->getOffset());
+            lines.push_back(base + "\t" + addr + "\t" +
+                            (fromElfSymtab(func) ? "elf" : "other") +
+                            "\t" + func->getName());
+        }
+    }
+    std::sort(lines.begin(), lines.end());
+    std::ofstream out("present.txt");
+    for (auto const &l : lines)
+        out << l << "\n";
+}
+
+
 static void recordAnalysisTotals(BPatch_image *img)
 {
+    recordPresentNames(img);
     AnalysisTotals totals = analysisTotals(img);
     std::ofstream out("totals.txt");
     out << totals.present.elfSymtab << " "
@@ -413,11 +446,11 @@ static void reportMetric(const char *label, size_t value,
                          const size_t *baseline)
 {
     if (baseline == NULL)  {
-        std::printf("    %-52s %zu\n", label, value);
+        std::printf("    %-52s %9zu\n", label, value);
         return;
     }
     long delta = (long) value - (long) *baseline;
-    std::printf("    %-52s %zu (delta: %+ld)\n", label, value, delta);
+    std::printf("    %-52s %9zu (delta: %+ld)\n", label, value, delta);
 }
 
 
@@ -904,6 +937,84 @@ static void checkCount(bool ok, const char *what, size_t baseline, size_t exclud
 }
 
 
+// object and entry address identify a function across two runs; the name
+// does not, because a function with several symbols at one address does not
+// report the same alias every time.
+struct PresentEntry
+{
+    std::string cls;
+    std::string name;
+};
+
+
+static std::map<std::string, PresentEntry> readPresent(const std::string &dir)
+{
+    std::map<std::string, PresentEntry> byAddr;
+    std::ifstream in((dir + "/present.txt").c_str());
+    std::string line;
+    while (std::getline(in, line))  {
+        size_t a = line.find('\t');
+        size_t b = (a == std::string::npos) ? a : line.find('\t', a + 1);
+        size_t c = (b == std::string::npos) ? b : line.find('\t', b + 1);
+        if (c == std::string::npos)
+            continue;
+        std::string key = line.substr(0, b);            // object and address
+        PresentEntry e;
+        e.cls = line.substr(b + 1, c - b - 1);
+        e.name = line.substr(c + 1);
+        byAddr[key] = e;
+    }
+    return byAddr;
+}
+
+
+// Say what actually differs.  A function that merely reports a different
+// alias is counted and not listed: that churn runs to four figures and would
+// bury the one entry that matters.
+static void reportNameDiff(const std::string &baseDir, const std::string &exclDir)
+{
+    std::map<std::string, PresentEntry> base = readPresent(baseDir);
+    std::map<std::string, PresentEntry> excl = readPresent(exclDir);
+    if (base.empty() && excl.empty())
+        return;
+
+    const size_t kShow = 8;
+    size_t renamed = 0;
+    size_t shown = 0;
+    size_t missing = 0;
+    size_t added = 0;
+
+    for (auto const &b : base)  {
+        auto found = excl.find(b.first);
+        if (found == excl.end())  {
+            missing++;
+            if (shown++ < kShow)
+                std::printf("        only in baseline: %s  %s  %s\n",
+                            b.first.c_str(), b.second.cls.c_str(),
+                            b.second.name.c_str());
+        }  else if (found->second.cls != b.second.cls)  {
+            std::printf("        class changed: %s  %s -> %s  (%s)\n",
+                        b.first.c_str(), b.second.cls.c_str(),
+                        found->second.cls.c_str(), b.second.name.c_str());
+        }  else if (found->second.name != b.second.name)  {
+            renamed++;
+        }
+    }
+    shown = 0;
+    for (auto const &e : excl)  {
+        if (base.find(e.first) == base.end())  {
+            added++;
+            if (shown++ < kShow)
+                std::printf("        only in excluded: %s  %s  %s\n",
+                            e.first.c_str(), e.second.cls.c_str(),
+                            e.second.name.c_str());
+        }
+    }
+    std::printf("        (%zu absent when excluded, %zu new, %zu same address "
+                "under another alias)\n", missing, added, renamed);
+}
+
+
 // One scenario: baseline and excluded, then compare what each produced.
 static int runScenario(const std::string &self, Scenario scenario)
 {
@@ -921,6 +1032,7 @@ static int runScenario(const std::string &self, Scenario scenario)
     std::vector<std::string> ran(2);
     std::vector<AnalysisTotals> totals(2);
     std::vector<bool> haveTotals(2, false);
+    std::vector<double> modeSeconds(2, 0.0);
 
     // Only the rewriting scenarios leave a binary behind to re-run.  The
     // snippet must actually have run in each of them: comparing the two runs
@@ -966,9 +1078,16 @@ static int runScenario(const std::string &self, Scenario scenario)
             bool haveReference = exclude && haveTotals[0];
             reportTotals(totals[mode], haveReference ? &totals[0] : NULL);
         }
+        modeSeconds[mode] = elapsedSeconds(modeStarted);
         if (showDurations)  {
-            std::printf("    %-52s %.3f sec\n", "duration",
-                        elapsedSeconds(modeStarted));
+            // the unit lives in the label so the figure lines up with the
+            // counts above it
+            if (exclude)  {
+                std::printf("    %-52s %9.3f (delta: %+.3f)\n", "duration (sec)",
+                            modeSeconds[1], modeSeconds[1] - modeSeconds[0]);
+            }  else  {
+                std::printf("    %-52s %9.3f\n", "duration (sec)", modeSeconds[0]);
+            }
         }
     }
 
@@ -1001,11 +1120,15 @@ static int runScenario(const std::string &self, Scenario scenario)
         checkCount(sameElf, "same elf symtab functions present",
                    base.present.elfSymtab, excl.present.elfSymtab);
         if (!sameElf)
+            reportNameDiff(name + ".baseline", name + ".excluded");
+        if (!sameElf)
             bad = 1;
 
         bool sameOther = (base.present.otherNonTarg == excl.present.otherNonTarg);
         checkCount(sameOther, "same other non-targ functions present",
                    base.present.otherNonTarg, excl.present.otherNonTarg);
+        if (!sameOther && sameElf)
+            reportNameDiff(name + ".baseline", name + ".excluded");
         if (!sameOther)
             bad = 1;
 
