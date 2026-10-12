@@ -3,7 +3,7 @@
 // an object, and on ppc64 the Power ABI v2 TOC handling for an object that was
 // excluded and so is parsed one function at a time.
 //
-//   exclusion_test              run all five scenarios, verbosely
+//   exclusion_test              run all six scenarios, verbosely
 //   exclusion_test <scenario>   run one scenario (this is what ctest does)
 //
 //   create       processCreate
@@ -16,8 +16,13 @@
 //   rewrite      openBinary with dependencies; instrument the executable
 //   rewrite-dep  openBinary with dependencies; instrument a function inside the
 //                excluded dependency
+//   reopen       the same library opened three times in one session, each open
+//                entitled to its own answer: as an excluded dependency, named
+//                outright to openBinary, and as a dependency again once the
+//                patterns have been cleared
 //
-// create, attach and dlopen need ProcControl.  rewrite and rewrite-dep do not.
+// create, attach and dlopen need ProcControl.  rewrite, rewrite-dep and reopen
+// do not.
 //
 // Every scenario runs twice, once as a baseline and once with the library
 // excluded, and both must reach the same answers.  For the rewriting scenarios
@@ -80,7 +85,8 @@ enum class Scenario
     Attach,
     Dlopen,
     Rewrite,
-    RewriteDep
+    RewriteDep,
+    Reopen
 };
 
 
@@ -91,7 +97,8 @@ static const std::vector<Scenario> &allScenarios()
                                                Scenario::Attach,
                                                Scenario::Dlopen,
                                                Scenario::Rewrite,
-                                               Scenario::RewriteDep };
+                                               Scenario::RewriteDep,
+                                               Scenario::Reopen };
     return all;
 }
 
@@ -103,7 +110,8 @@ static const std::map<std::string, Scenario> &scenarioByName()
         { "attach",      Scenario::Attach },
         { "dlopen",      Scenario::Dlopen },
         { "rewrite",     Scenario::Rewrite },
-        { "rewrite-dep", Scenario::RewriteDep }
+        { "rewrite-dep", Scenario::RewriteDep },
+        { "reopen",      Scenario::Reopen }
     };
     return byName;
 }
@@ -734,6 +742,76 @@ static int sceneRewrite(BPatch &bpatch, bool exclude, bool intoDep)
 }
 
 
+// Dyninst keeps every image it has parsed and hands one back to any later open
+// of the same file name.  An image carries the decision made when it was built,
+// so a cache that ignores the decision answers the wrong question: the first
+// open of a library would settle what every later one got.  Here the same
+// libtoc.so is opened three times, and the three opens do not agree.
+static int sceneReopen(BPatch &bpatch, bool exclude)
+{
+    BPatch_binaryEdit *be = bpatch.openBinary("./mutatee", true /* dependencies */);
+    check(be != NULL, "openBinary of the executable");
+    if (!be)
+        return 1;
+
+    BPatch_object *dep = findObj(be->getImage(), "libtoc");
+    check(dep != NULL, "dependency opened");
+    if (!dep)
+        return 1;
+
+    size_t asDependency = funcCount(dep);
+    check(exclude ? (asDependency == 0) : (asDependency > 0),
+          exclude ? "excluded as a dependency" : "parsed as a dependency");
+
+    // The path Dyninst resolved the dependency to.  Naming that same path is
+    // what reaches the cached image; a different spelling of it would miss the
+    // cache and prove nothing.
+    std::string path = dep->pathName();
+    check(!path.empty(), "dependency path recorded");
+    if (path.empty())
+        return 1;
+
+    // Opened outright, and so analyzed however it was treated a moment ago:
+    // naming a file to openBinary is a request to instrument it.
+    BPatch_binaryEdit *lib = bpatch.openBinary(path.c_str());
+    check(lib != NULL, "openBinary of the library itself");
+    if (!lib)
+        return 1;
+
+    BPatch_object *own = findObj(lib->getImage(), "libtoc");
+    check(own != NULL, "library opened as its own target");
+    check(own && funcCount(own) > 0, "a library named outright is analyzed");
+
+    // Clearing the patterns has to reach the next open of a file already
+    // opened under them.  This comes before anything is looked up by name:
+    // an on-demand parse would leave functions behind in the excluded image
+    // and the count below would no longer say which image it came from.
+    bpatch.clearAnalysisExcludePatterns();
+    BPatch_binaryEdit *after = bpatch.openBinary("./mutatee", true);
+    check(after != NULL, "openBinary of the executable a second time");
+    if (!after)
+        return 1;
+
+    BPatch_object *now = findObj(after->getImage(), "libtoc");
+    check(now != NULL, "dependency opened a second time");
+    check(now && funcCount(now) > 0,
+          "dependency analyzed once the patterns are cleared");
+
+    // ... and what the second open got is a CFG, not an object that merely
+    // counts functions
+    BPatch_function *f = findOne(lib->getImage(), "toc_get");
+    check(f != NULL, "toc_get found in the library opened outright");
+    std::vector<BPatch_point *> *pts = f ? f->findPoint(BPatch_entry) : NULL;
+    check(pts && !pts->empty(), "its entry point can be instrumented");
+
+    // Nothing above reached back into an image already handed out: an open
+    // that decides differently builds its own image rather than changing one.
+    checkVal((long) funcCount(dep), (long) asDependency,
+             "the first edit still sees what it was given");
+    return 0;
+}
+
+
 // The worker: one scenario, one mode, in an already-prepared directory.
 static int runWorker(Scenario scenario, bool exclude)
 {
@@ -761,6 +839,9 @@ static int runWorker(Scenario scenario, bool exclude)
         break;
     case Scenario::RewriteDep:
         rc = sceneRewrite(bpatch, exclude, true);
+        break;
+    case Scenario::Reopen:
+        rc = sceneReopen(bpatch, exclude);
         break;
     }
 

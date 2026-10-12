@@ -31,9 +31,9 @@ add_dependencies(exclusion_test exclusion_mutatee exclusion_toc exclusion_plugA
                  exclusion_plugB)
 
 # create, attach and dlopen drive a live process and so need ProcControl.
-# rewrite and rewrite-dep only rewrite files on disk.
+# rewrite, rewrite-dep and reopen only open and rewrite files on disk.
 set(_dynamic_scenarios create attach dlopen)
-set(_static_scenarios rewrite rewrite-dep)
+set(_static_scenarios rewrite rewrite-dep reopen)
 
 # When dynamic tests are off they are still registered, and report
 # themselves skipped, rather than vanishing: a test that is absent looks the
