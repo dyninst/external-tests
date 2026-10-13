@@ -18,5 +18,5 @@ cmake_host_system_information(RESULT _host_arch QUERY OS_PLATFORM)
 
 # Static rewriting isn't supported on aarch64
 if("${_host_arch}" STREQUAL "aarch64")
-  set_property(TEST dyninstAPI_static_ctor_dtor DISABLED TRUE)
+  set_property(TEST dyninstAPI_static_ctor_dtor PROPERTY DISABLED TRUE)
 endif()
