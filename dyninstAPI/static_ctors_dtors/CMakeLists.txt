@@ -1,13 +1,5 @@
 project(dyninstAPI_static_ctor_dtor)
 
-cmake_host_system_information(RESULT _host_arch QUERY OS_PLATFORM)
-
-# Static rewriting isn't supported on aarch64
-if("${_host_arch}" STREQUAL "aarch64")
-  return()
-endif()
-
-
 add_executable(main main.cpp)
 target_link_libraries(main PRIVATE "-static")
 
@@ -21,3 +13,10 @@ set_property(
   TEST dyninstAPI_static_ctor_dtor
   PROPERTY ENVIRONMENT
            "DYNINSTAPI_RT_LIB=${Dyninst_DIR}/../../libdyninstAPI_RT.a")
+
+cmake_host_system_information(RESULT _host_arch QUERY OS_PLATFORM)
+
+# Static rewriting isn't supported on aarch64
+if("${_host_arch}" STREQUAL "aarch64")
+  set_property(TEST dyninstAPI_static_ctor_dtor DISABLED TRUE)
+endif()
