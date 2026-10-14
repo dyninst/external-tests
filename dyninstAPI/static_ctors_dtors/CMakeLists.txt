@@ -12,7 +12,7 @@ set_property(TEST dyninstAPI_static_ctor_dtor PROPERTY PASS_REGULAR_EXPRESSION
 set_property(
   TEST dyninstAPI_static_ctor_dtor
   PROPERTY ENVIRONMENT
-           "DYNINSTAPI_RT_LIB=${Dyninst_DIR}/../../libdyninstAPI_RT.a")
+           "DYNINSTAPI_RT_LIB=$<TARGET_FILE:Dyninst::dyninstAPI_RT_static>")
 
 cmake_host_system_information(RESULT _host_arch QUERY OS_PLATFORM)
 
