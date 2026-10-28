@@ -10,15 +10,8 @@ dyninst_add_test_executable(
 dyninst_add_test(
   dyninstAPI_static_ctor_dtor
   COMMAND sh -c "./mutator && ./main_rewritten"
-  REQUIRES static_exe
+  REQUIRES static_exe static_rewrite
   PROPERTIES
     PASS_REGULAR_EXPRESSION "Foo\nHello\n~Foo"
     ENVIRONMENT "DYNINSTAPI_RT_LIB=${Dyninst_DIR}/../../libdyninstAPI_RT.a"
 )
-
-cmake_host_system_information(RESULT _host_arch QUERY OS_PLATFORM)
-
-# Static rewriting isn't supported on aarch64
-if("${_host_arch}" STREQUAL "aarch64")
-  set_property(TEST dyninstAPI_static_ctor_dtor PROPERTY DISABLED TRUE)
-endif()

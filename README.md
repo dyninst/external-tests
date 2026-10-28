@@ -47,3 +47,4 @@ each with the reason a test prints when it is not met:
 | Requirement      | Met when                                  |
 | :--------------- | :---------------------------------------- |
 | `static_exe`     | `DYNINST_ENABLE_STATIC_TESTS`             |
+| `static_rewrite` | the host is not aarch64                   |
