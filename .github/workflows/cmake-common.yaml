@@ -1,0 +1,40 @@
+name: Shared CMake files
+
+# cmake/common is a copy of Dyninst's.  This checks that it still matches
+# Dyninst's master, so a copy that was edited here, or not updated after a
+# change in Dyninst, is noticed.  It is a workflow of its own so that a
+# failure here is not taken for a failure of a pull request's own changes.
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  check-copy:
+    name: cmake/common matches Dyninst's
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        path: tests
+        persist-credentials: false
+
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        repository: dyninst/dyninst
+        ref: master
+        path: dyninst
+        sparse-checkout: cmake/common
+        persist-credentials: false
+
+    - name: Compare with Dyninst's cmake/common
+      working-directory: tests
+      run: |
+        cmake -DCOPY=cmake/common -DMASTER=../dyninst/cmake/common \
+              -P cmake/common/DyninstCheckCopy.cmake

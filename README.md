@@ -34,7 +34,8 @@ as skipped and says why. Tests are written in C++.
 
 `cmake/common` is a copy of Dyninst's, kept unchanged so that a test is
 written the same way in both repositories; a change to it is made in
-Dyninst and copied here. [`cmake/common/README.md`](cmake/common/README.md)
+Dyninst and copied here, and the Shared CMake files workflow checks that
+it still matches Dyninst's. [`cmake/common/README.md`](cmake/common/README.md)
 describes the functions in full: their keywords, defining a requirement,
 skipping, and where a test's output goes. There are no test types here,
 so tests have no `TYPE`.
