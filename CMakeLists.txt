@@ -12,6 +12,10 @@ find_package(Dyninst 13.0.0 REQUIRED)
 
 include(CTest)
 
+# cmake/common is a copy of Dyninst's, shared unchanged; see its README.md
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/common/warnings")
+include(DyninstWarnings)
+
 add_subdirectory(common)
 add_subdirectory(dataflowAPI)
 add_subdirectory(dynC_API)
