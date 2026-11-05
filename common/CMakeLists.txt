@@ -3,6 +3,4 @@ project(common)
 add_executable(common_insertion_operators insertion_operators.cpp)
 target_link_libraries(common_insertion_operators PRIVATE Dyninst::common)
 
-add_executable(common_includes includes.cpp)
-target_link_libraries(common_includes PRIVATE Dyninst::common)
-add_test(NAME common_includes COMMAND common_includes)
+dyninst_add_test(common_includes SOURCE_FILES includes.cpp DEPS Dyninst::common)

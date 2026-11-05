@@ -60,7 +60,7 @@ int main() {
     return nullptr;
   };
 
-  auto find_mod = [&funcs_by_mod](st::Function *f, std::string const &name) {
+  auto find_mod = [](st::Function *f, std::string const &name) {
     auto *m = f->getModule();
     auto const &basename = bf::path(m->fileName()).stem();
     auto const &extension = bf::path(m->fileName()).extension();

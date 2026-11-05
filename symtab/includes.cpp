@@ -18,4 +18,5 @@
 int main() {
 	namespace ds = Dyninst::SymtabAPI;
 	auto *al = ds::AddressLookup::createAddressLookup();
+	static_cast<void>(al);
 }

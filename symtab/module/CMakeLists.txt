@@ -1,8 +1,6 @@
 project(module)
 
-add_executable(module_parser parser.cpp)
-target_link_libraries(module_parser PRIVATE Dyninst::symtabAPI)
-add_test(NAME module_parser COMMAND module_parser)
+dyninst_add_test(module_parser SOURCE_FILES parser.cpp DEPS Dyninst::symtabAPI)
 
 add_library(lib1func1 OBJECT lib1.cpp)
 target_compile_definitions(lib1func1 PRIVATE FUNC1)
