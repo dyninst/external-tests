@@ -49,3 +49,12 @@ each with the reason a test prints when it is not met:
 | :--------------- | :---------------------------------------- |
 | `static_exe`     | `DYNINST_ENABLE_STATIC_TESTS`             |
 | `static_rewrite` | the host is not aarch64                   |
+
+## Formatting the CMake files
+
+The CMake files are formatted with [gersemi](https://github.com/BlankSpruce/gersemi),
+at the version in `cmake/dependencies.versions` and with the settings in
+`.gersemirc`. After configuring, `cmake --build . --target cmake-check`
+lists the files that are not formatted, and `--target cmake-reformat`
+formats them. The targets come from `cmake/common`;
+[`cmake/common/README.md`](cmake/common/README.md) describes them.
