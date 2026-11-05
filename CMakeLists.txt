@@ -17,10 +17,18 @@ list(
   APPEND CMAKE_MODULE_PATH
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/common/ctest"
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/common/gersemi"
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/common/warnings"
 )
 include(DyninstWarnings)
 include(DyninstTestRequirements)
+
+# The cmake-check and cmake-reformat targets, with the pinned gersemi
+set(
+  DYNINST_GERSEMI_VERSIONS_FILE
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dependencies.versions"
+)
+include(DyninstCMakeFormat)
 
 add_subdirectory(common)
 add_subdirectory(dataflowAPI)

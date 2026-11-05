@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/BlankSpruce/gersemi/master/gersemi/configuration.schema.json
+
+# The same settings as Dyninst's, so cmake/common, a copy of Dyninst's,
+# stays formatted.
+indent: 2
+line_length: 90
+definitions:
+  - cmake
